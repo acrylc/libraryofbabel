@@ -7,7 +7,10 @@ var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 var lookAt, lookAtX, lookAtZ;
-
+var stop = false;
+var moveNext = false;
+var turnInc = 1;
+var turning = true;
 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
 init();
@@ -28,22 +31,42 @@ function init() {
 	camera.position.x = 0;
 	// camera.rotation.x = 40 * (Math.PI / 180);
 	// scene
-	lookAtX = 52.2;//0;
-	lookAtY = 90;//0;
-	lookAtZ = -25;//0;
+	lookAtX = 0;//52.2;//0;
+	lookAtY = 100;//90;//0;
+	lookAtZ = -20;//0;
 	 lookAt = new THREE.Vector3 (lookAtX,lookAtY,lookAtZ);
 
-var axis = new THREE.Vector3( 0, 0, 1 );
-var angle = 0;
-var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
+// var axis = new THREE.Vector3( 0, 0, 1 );
+// var angle = 0;
+// var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
 
-lookAt.applyMatrix4( matrix );
+// lookAt.applyMatrix4( matrix );
 
 	camera.lookAt(lookAt);
 
 
 	scene = new THREE.Scene();
 	scene.fog = new THREE.Fog( 0xffffff, 1000, 10000 );
+moveToNextRoom = function(){
+
+	// i = 0;
+	// dist = 0;
+	if (camera.position.y<110 &&  camera.position.y >= 0){
+		camera.position.y += 2.5;
+	}
+	if (camera.position.y==110 || camera.position.y==111)
+		camera.position.y = -105;
+	if (camera.position.y < 0){
+		camera.position.y += 2.5;
+		stop = true;
+	}
+	if (camera.position.y == 0 || camera.position.y == -1){
+		turning = true;
+		camera.position.y = 0
+		moveNext= false;
+	}
+}
+
 
 // LIGHTS
 
@@ -156,6 +179,7 @@ group.add( hexagon );//add a mesh with geometry to it
 // group.add( hexagon2 );//add a mesh with geometry to it
 group.add( textMesh );//add a mesh with geometry to it
 // group.rotation.y = ( Math.PI / 90)
+group.rotation.z = 0.523598776;
 scene.add(group);
 
 
@@ -186,6 +210,15 @@ var material2 = new THREE.MeshBasicMaterial({
 	color:0xfa1a1F
 })
 
+$(document).keydown(function(evt) {
+    if (evt.keyCode == 32) {
+      space = true;
+      moveNext= true;
+    }
+  });
+
+
+
   // revolutions per second
 var angularSpeed = 0.2; 
 var lastTime = 0;
@@ -197,39 +230,61 @@ function animate(){
     var timeDiff = time - lastTime;
     var angleChange = angularSpeed * timeDiff * 2 * Math.PI / 1000;
     
-    // rotate hexagon every 800 sec
-    if ( inc < 1.04719755  ){
-         // hexagon.rotation.z += 0.0698;
-         // textMesh.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0, 0 ) );
 
-var axis = new THREE.Vector3( 0, 0, 1 );
-var angle = -0.05;
-var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
-inc +=0.05;
-lookAt.applyMatrix4( matrix );
+    // if (timeDiff >= 700 && turning==true){
+    // 	lastTime = time;
+    // 	hexagon.rotation.z = turnInc * 1.04;
+    // 	turnInc = (turnInc+1)%7;
+    // }
+
+    if (moveNext == true){
+    	turning = false;
+    	moveToNextRoom();
+    }
+
+    // camera.position.y += 0.01;
+    animateTurn = function(){
+		// rotate hexagon every 800 sec
+		if ( inc < 1.04719755  ){
+		// hexagon.rotation.z += 0.0698;
+		// textMesh.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0, 0 ) );
+
+			var axis = new THREE.Vector3( 0, 0, 1 );
+			var angle = -0.05;
+			var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
+			inc +=0.05;
+			// lookAt.applyMatrix4( matrix );
+			group.rotation.z +=0.05;		
 
 
-         // lookAt.rotation.z += 0.0698;
-     }
-     	camera.lookAt(lookAt);
-// camera.rotation.x = ( Math.PI / 90)
+		// lookAt.rotation.z += 0.0698;
+		}
+		camera.lookAt(lookAt);
+		// camera.rotation.x = ( Math.PI / 90)
 
-	if (timeDiff == 800){
-var axis = new THREE.Vector3( 0, 0, 1 );
-var angle = -0.05;
-var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
-inc +=0.04719755;
-lookAt.applyMatrix4( matrix );		
+		if (inc == 1.0){
+			// var axis = new THREE.Vector3( 0, 0, 1 );
+			// var angle = -0.05;
+			// var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
+			inc +=0.04719755;
+			// lookAt.applyMatrix4( matrix );
+			group.rotation.z +=0.05719755;		
+		}
+
+		// camera.rotation.x +=0.001;
+		if (timeDiff >= 700){
+		lastTime = time;  
+		inc = 0; 
+		}
 	}
 
-      // camera.rotation.x +=0.001;
-    if (timeDiff >= 700){
-	    lastTime = time;  
-	    inc = 0; 
- 	}
+	if (turning == true)
+			    animateTurn();
+
 
     // request new frame
     requestAnimationFrame(function(){
         animate();
     });
 }
+
