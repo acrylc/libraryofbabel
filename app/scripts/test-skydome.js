@@ -11,6 +11,7 @@ var stop = false;
 var moveNext = false;
 var turnInc = 1;
 var turning = true;
+var side = 1;
 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
 init();
@@ -61,10 +62,11 @@ moveToNextRoom = function(){
 		stop = true;
 	}
 	if (camera.position.y == 0 || camera.position.y == -1){
-		turning = true;
 		camera.position.y = 0
 		moveNext= false;
+		turning = true;
 	}
+
 }
 
 
@@ -245,16 +247,16 @@ function animate(){
     // camera.position.y += 0.01;
     animateTurn = function(){
 		// rotate hexagon every 800 sec
-		if ( inc < 1.04719755  ){
+		if ( inc < 1.04719755   ){
 		// hexagon.rotation.z += 0.0698;
 		// textMesh.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0, 0 ) );
 
 			var axis = new THREE.Vector3( 0, 0, 1 );
 			var angle = -0.05;
 			var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
-			inc +=0.05;
+			inc +=0.1;
 			// lookAt.applyMatrix4( matrix );
-			group.rotation.z +=0.05;		
+			group.rotation.z +=0.1;		
 
 
 		// lookAt.rotation.z += 0.0698;
@@ -262,24 +264,33 @@ function animate(){
 		camera.lookAt(lookAt);
 		// camera.rotation.x = ( Math.PI / 90)
 
-		if (inc == 1.0){
+		if ( inc >= 1.0){
 			// var axis = new THREE.Vector3( 0, 0, 1 );
 			// var angle = -0.05;
 			// var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
 			inc +=0.04719755;
 			// lookAt.applyMatrix4( matrix );
-			group.rotation.z +=0.05719755;		
+			group.rotation.z =  1.04719755*side + 0.5 ;
+			side = (side+1)%6;
+			inc = 0;
+			lastTime = time;  
+			turning = false;
+
+			// group.rotation.z +=0.05719755;		
 		}
 
-		// camera.rotation.x +=0.001;
-		if (timeDiff >= 700){
-		lastTime = time;  
-		inc = 0; 
-		}
+		// // camera.rotation.x +=0.001;
+		// if (timeDiff >= 700){
+		// lastTime = time;  
+		// inc = 0; 
+		// }
 	}
 
+	if (timeDiff >= 350 && moveNext==false)
+		turning = true;
+
 	if (turning == true)
-			    animateTurn();
+		    animateTurn();
 
 
     // request new frame
