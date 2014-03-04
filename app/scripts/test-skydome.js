@@ -26,20 +26,20 @@ function init() {
 
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
-	room = {}
-	// room objects has : title, caption (random str), wall[] with text and titles, 
-	room.title = 'The Library of babel'
-	room.txt = 'Despite — indeed, because of — this glut of information, all books are totally useless to the reader, leaving the librarians in a state of suicidal despair.'
-	room.walls = [
-		{title: 'Wall 1', txt :''},
-		{title: 'Wall 2', txt :''},
-		{title: 'Wall 3', txt :''},
-		{title: 'Wall 4', txt :''},
-		{title: 'Wall 5', txt :''},
-		{title: 'Wall 6', txt :''}
-	]
-	room.chatter = 0.5;
-	displayNewRoom(room);
+	// room = {}
+	// // room objects has : title, caption (random str), wall[] with text and titles, 
+	// room.title = 'The Library of babel'
+	// room.txt = 'Despite — indeed, because of — this glut of information, all books are totally useless to the reader, leaving the librarians in a state of suicidal despair.'
+	// room.walls = [
+	// 	{title: 'Wall 1', txt :''},
+	// 	{title: 'Wall 2', txt :''},
+	// 	{title: 'Wall 3', txt :''},
+	// 	{title: 'Wall 4', txt :''},
+	// 	{title: 'Wall 5', txt :''},
+	// 	{title: 'Wall 6', txt :''}
+	// ]
+	// room.chatter = 0.5;
+initRoom();
 
 	// create camera
 	camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 100000 );
