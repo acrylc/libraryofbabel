@@ -12,98 +12,108 @@ var moveNext = false;
 var turnInc = 1;
 var turning = true;
 var side = 1;
-document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+var currentRoom 
+var crowd = new Howl({
+	urls: ['crowd-talking.mp3']
+});
+var volume = 0.7;
+var oldVol 
+var newVol
 
-init();
-animate();
+document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
 function init() {
 
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
+	room = {}
+	// room objects has : title, caption (random str), wall[] with text and titles, 
+	room.title = 'The Library of babel'
+	room.txt = 'Despite — indeed, because of — this glut of information, all books are totally useless to the reader, leaving the librarians in a state of suicidal despair.'
+	room.walls = [
+		{title: 'Wall 1', txt :''},
+		{title: 'Wall 2', txt :''},
+		{title: 'Wall 3', txt :''},
+		{title: 'Wall 4', txt :''},
+		{title: 'Wall 5', txt :''},
+		{title: 'Wall 6', txt :''}
+	]
+	room.chatter = 0.5;
+	displayNewRoom(room);
 
-	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 100000 );
-
-	// camera
-	// var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1300);
+	// create camera
+	camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 100000 );
 	camera.position.y = 0;// -400;
 	camera.position.z = -35;//400;
-	camera.up = new THREE.Vector3(0,0,1);
 	camera.position.x = 0;
-	// camera.rotation.x = 40 * (Math.PI / 180);
-	// scene
+	camera.up = new THREE.Vector3(0,0,1);
 	lookAtX = 0;//52.2;//0;
 	lookAtY = 100;//90;//0;
 	lookAtZ = -20;//0;
-	 lookAt = new THREE.Vector3 (lookAtX,lookAtY,lookAtZ);
-
-// var axis = new THREE.Vector3( 0, 0, 1 );
-// var angle = 0;
-// var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
-
-// lookAt.applyMatrix4( matrix );
-
+	lookAt = new THREE.Vector3 (lookAtX,lookAtY,lookAtZ);
 	camera.lookAt(lookAt);
 
-
+	// create scene
 	scene = new THREE.Scene();
+
+	// add fog and light
 	scene.fog = new THREE.Fog( 0xffffff, 1000, 10000 );
-moveToNextRoom = function(){
+	var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.475 );
+	directionalLight.position.set( 100, 100, -100 );
+	scene.add( directionalLight );
+	var hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1.25 );
+	hemiLight.color.setHSL( 0.58, 0.2, 0.9 );
+	hemiLight.groundColor.setHSL( 9, 1, 0.9 );
+	hemiLight.position.x = 500;
+	scene.add( hemiLight );
 
-	// i = 0;
-	// dist = 0;
-	if (camera.position.y<110 &&  camera.position.y >= 0){
-		camera.position.y += 2.5;
+	// add gradient skydome
+	var vertexShader = document.getElementById( 'vertexShader' ).textContent;
+	var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
+	var uniforms = {
+		topColor: 	 { type: "c", value: new THREE.Color( 0xff7ff ) },
+		bottomColor: { type: "c", value: new THREE.Color( 0xffffff ) },
+		offset:		 { type: "f", value: 00 },
+		exponent:	 { type: "f", value: 0.99 }
 	}
-	if (camera.position.y==110 || camera.position.y==111)
-		camera.position.y = -105;
-	if (camera.position.y < 0){
-		camera.position.y += 2.5;
-		stop = true;
-	}
-	if (camera.position.y == 0 || camera.position.y == -1){
-		camera.position.y = 0
-		moveNext= false;
-		turning = true;
-	}
+	uniforms.topColor.value.copy( hemiLight.color );
+	scene.fog.color.copy( uniforms.bottomColor.value );
+	var skyGeo = new THREE.SphereGeometry( 4000, 32, 15 );
+	var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
+	var sky = new THREE.Mesh( skyGeo, skyMat );
+	sky.rotation.y = 0.4;
+	scene.add( sky );
 
-}
+	// create text
+	var text = '"The Library of Babel" (Spanish: La biblioteca de Babel) is a short story by Argentine author and librarian Jorge Luis Borges (1899–1986), conceiving of a universe in the form of a vast library containing all possible 410-page books of a certain format. The story was originally published in Spanish in Borgess 1941 collection of stories El Jardín de senderos que se bifurcan (The Garden of Forking Paths). That entire book was, in turn, included within his much-reprinted Ficciones (1944). Two English-language translations appeared approximately simultaneously in 1962, one by James E. Irby in a diverse collection of Borgess works titled Labyrinths and the other by Anthony Kerrigan as part of a collaborative translation of the entirety of Ficciones.'
+	var text3d = new THREE.TextGeometry(text, {
+		  // font: 'serif',  //change this
+		 font:'helvetiker',
+	  size: 1,
+	  height: 0.1,
+	  weight: 'normal'
+	});
+	var material3 = new THREE.MeshBasicMaterial({
+	  color: 0xDADADA
+	});
+	var textMesh = new THREE.Mesh( text3d, material3 );
+	textMesh.translateZ( 0 );
+	textMesh.translateX( 0 );
+	textMesh.rotation.x = 90 * (Math.PI / 180);
+	textMesh.rotation.y = 30 * (Math.PI / 180);
+	textMesh.translateZ(-100);
+	textMesh.translateY(-10);
+	textMesh.translateX(-50);
 
-
-// LIGHTS
-
-				var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.475 );
-				directionalLight.position.set( 100, 100, -100 );
-				scene.add( directionalLight );
-
-
-				var hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1.25 );
-				hemiLight.color.setHSL( 0.59, 0.2, 0.9 );
-				hemiLight.groundColor.setHSL( 9, 0.8, 0.7 );
-				hemiLight.position.x = 500;
-				scene.add( hemiLight );
-
-				// SKYDOME
-
-				var vertexShader = document.getElementById( 'vertexShader' ).textContent;
-				var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
-				var uniforms = {
-					topColor: 	 { type: "c", value: new THREE.Color( 0xff7ff ) },
-					bottomColor: { type: "c", value: new THREE.Color( 0xffffff ) },
-					offset:		 { type: "f", value: 00 },
-					exponent:	 { type: "f", value: 0.99 }
-				}
-				uniforms.topColor.value.copy( hemiLight.color );
-
-				scene.fog.color.copy( uniforms.bottomColor.value );
-
-				var skyGeo = new THREE.SphereGeometry( 4000, 32, 15 );
-				var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
-
-				var sky = new THREE.Mesh( skyGeo, skyMat );
-				sky.rotation.y = 0.4;
-				scene.add( sky );
-
+	// create hexgon
+	hexagon =  Hexagon(120, 50, 0,0, 0xdadadF);
+	
+	// create and add hexagon/text group
+	group = new THREE.Object3D();//create an empty container
+	group.add( hexagon );//add a mesh with geometry to it
+	group.add( textMesh );//add a mesh with geometry to it
+	group.rotation.z = 0.523598776;
+	scene.add(group);
 
 	// skycube = new Skycube();
 	// var geometry = new THREE.SphereGeometry( 100, 32, 16 );
@@ -119,15 +129,12 @@ moveToNextRoom = function(){
 	// skycube.cameraCube.aspect = window.innerWidth / window.innerHeight;
 	// skycube.cameraCube.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
-					// renderer = new THREE.WebGLRenderer( { antialias: true } );
-				renderer.setClearColor( scene.fog.color, 1 );
-				// renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
-				// renderer.domElement.style.position = "relative";
-				// container.appendChild( renderer.domElement );
+	renderer.setClearColor( scene.fog.color, 1 );
 
 	container.appendChild( renderer.domElement );
 	window.addEventListener( 'resize', onWindowResize, false );
 	render();
+	crowd.play();
 }
 
 function onWindowResize() {
@@ -150,62 +157,24 @@ function animate() {
 	render();
 }
 
-
-var text3d = new THREE.TextGeometry('The Library of Babel', {
-	  // font: 'serif',  //change this
-	 font:'helvetiker',
-  size: 5,
-  height: 1,
-  weight: 'normal'
-});
-
-var material3 = new THREE.MeshBasicMaterial({
-  color: 0xffffff
-});
-
-var textMesh = new THREE.Mesh( text3d, material3 );
-textMesh.translateZ( 0 );
-textMesh.translateX( 0 );
-textMesh.rotation.x = 90 * (Math.PI / 180);
-textMesh.rotation.y = 30 * (Math.PI / 180);
-textMesh.translateZ(-100);
-textMesh.translateY(-10);
-textMesh.translateX(-50);
-
-
-hexagon =  Hexagon(120, 50, 0,0, 0xdadadF);
-// hexagon2 =  Hexagon(120, 50, 240,0, 0xdadadF);
-// hexagon2 =  Hexagon(120, 50, -240,0, 0xdadadF);
-group = new THREE.Object3D();//create an empty container
-group.add( hexagon );//add a mesh with geometry to it
-// group.add( hexagon2 );//add a mesh with geometry to it
-group.add( textMesh );//add a mesh with geometry to it
-// group.rotation.y = ( Math.PI / 90)
-group.rotation.z = 0.523598776;
-scene.add(group);
-
-
-	// camera.lookAt(scene.position);
-	// scene.add(scene.position);
-
 function render() {
 
 	var timer = 0.0001 * Date.now();
+	renderer.render( scene, camera );
+	    // crowd.play();
+    crowd.volume(volume);
+
 	// camera.position.x += ( mouseX - camera.position.x ) * .05;
 	// camera.position.y += ( - mouseY - camera.position.y ) * .05;
 	// camera.lookAt( scene.position );
 	// skycube.cameraCube.rotation.copy( camera.rotation );
 
-
-
-// // Do some optional calculations. This is only if you need to get the
-// // width of the generated text
-// textGeom.computeBoundingBox();
-// textGeom.textWidth = textGeom.boundingBox.max.x - textGeom.boundingBox.min.x;
+	// // Do some optional calculations. This is only if you need to get the
+	// // width of the generated text
+	// textGeom.computeBoundingBox();
+	// textGeom.textWidth = textGeom.boundingBox.max.x - textGeom.boundingBox.min.x;
 
 	// renderer.render( skycube.sceneCube, skycube.cameraCube );
-	renderer.render( scene, camera );
-
 }
 
 var material2 = new THREE.MeshBasicMaterial({
@@ -217,7 +186,7 @@ $(document).keydown(function(evt) {
       space = true;
       moveNext= true;
     }
-  });
+});
 
 
 
@@ -299,3 +268,7 @@ function animate(){
     });
 }
 
+
+
+init();
+animate();
