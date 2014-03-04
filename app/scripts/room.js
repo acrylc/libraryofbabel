@@ -14,6 +14,7 @@ initRoom = function(){
 		    pages = []
 		    //get all pages
 		    for (i in d['query']['pages']) pages.push( d['query']['pages'][i] )
+		    	console.log(pages.length)
 		    //get 6 random ones
 			stop  = Math.min(6, pages.length);
 			walls = []
@@ -35,7 +36,7 @@ initRoom = function(){
 }
 
 getRoom = function(id, title){
-		$.getJSON("https://en.wikipedia.org/w/api.php?action=query&format=json&pageids="+id+"&generator=links&gpllimit=10&callback=?", function(data) {
+		$.getJSON("https://en.wikipedia.org/w/api.php?action=query&format=json&pageids="+id+"&generator=links&gpllimit=100&callback=?", function(data) {
 	    console.log(data); d= data;
 	    room = {};
 	    pages = []
@@ -43,6 +44,7 @@ getRoom = function(id, title){
 	    for (i in d['query']['pages']) pages.push( d['query']['pages'][i] )
 	    //get 6 random ones
 		stop  = Math.min(6, pages.length);
+		console.log(pages.length)
 		walls = []
 		for(var i = 0;i<stop;i++){
 			k = Math.floor(Math.random()*(pages.length-1))
@@ -83,11 +85,16 @@ moveToNextRoom = function(){
 		if (side==0) side = 5
 		else side = (side-1)
 
-		getRoom(currentRoom.walls[side].id, currentRoom.walls[side].title )
-
-		group.rotation.z = 1.04719755*side + 0.5;
-		oldVol = volume
-		newVol = room.chatter
+		if (currentRoom.walls[side] == undefined){
+			moveNext= false;
+			turning = true;
+			console.log('undefined')
+		} else {
+			getRoom(currentRoom.walls[side].id, currentRoom.walls[side].title )
+			// group.rotation.z = 1.04719755*side + 0.5;
+			oldVol = volume
+			newVol = room.chatter
+		}
 	}
 	// move forward
 	if (camera.position.y<110 &&  camera.position.y >= 0){
