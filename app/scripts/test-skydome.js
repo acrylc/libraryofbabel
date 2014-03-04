@@ -12,13 +12,17 @@ var moveNext = false;
 var turnInc = 1;
 var turning = true;
 var side = 1;
-var currentRoom 
+var currentRoom = {}
 var crowd = new Howl({
 	urls: ['crowd-talking.mp3']
 });
 var volume = 0.7;
 var oldVol 
 var newVol
+var textMesh
+var path = "";
+var pathTitles = [];
+
 
 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
@@ -42,7 +46,7 @@ function init() {
 initRoom();
 
 	// create camera
-	camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 1, 100000 );
+	camera = new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 1, 100000 );
 	camera.position.y = 0;// -400;
 	camera.position.z = -35;//400;
 	camera.position.x = 0;
@@ -82,28 +86,9 @@ initRoom();
 	var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
 	var sky = new THREE.Mesh( skyGeo, skyMat );
 	sky.rotation.y = 0.4;
-	scene.add( sky );
+	// scene.add( sky );
 
-	// create text
-	var text = '"The Library of Babel" (Spanish: La biblioteca de Babel) is a short story by Argentine author and librarian Jorge Luis Borges (1899–1986), conceiving of a universe in the form of a vast library containing all possible 410-page books of a certain format. The story was originally published in Spanish in Borgess 1941 collection of stories El Jardín de senderos que se bifurcan (The Garden of Forking Paths). That entire book was, in turn, included within his much-reprinted Ficciones (1944). Two English-language translations appeared approximately simultaneously in 1962, one by James E. Irby in a diverse collection of Borgess works titled Labyrinths and the other by Anthony Kerrigan as part of a collaborative translation of the entirety of Ficciones.'
-	var text3d = new THREE.TextGeometry(text, {
-		  // font: 'serif',  //change this
-		 font:'helvetiker',
-	  size: 1,
-	  height: 0.1,
-	  weight: 'normal'
-	});
-	var material3 = new THREE.MeshBasicMaterial({
-	  color: 0xDADADA
-	});
-	var textMesh = new THREE.Mesh( text3d, material3 );
-	textMesh.translateZ( 0 );
-	textMesh.translateX( 0 );
-	textMesh.rotation.x = 90 * (Math.PI / 180);
-	textMesh.rotation.y = 30 * (Math.PI / 180);
-	textMesh.translateZ(-100);
-	textMesh.translateY(-10);
-	textMesh.translateX(-50);
+
 
 	// create hexgon
 	hexagon =  Hexagon(120, 50, 0,0, 0xdadadF);
@@ -111,7 +96,7 @@ initRoom();
 	// create and add hexagon/text group
 	group = new THREE.Object3D();//create an empty container
 	group.add( hexagon );//add a mesh with geometry to it
-	group.add( textMesh );//add a mesh with geometry to it
+	//group.add( textMesh );//add a mesh with geometry to it
 	group.rotation.z = 0.523598776;
 	scene.add(group);
 
@@ -119,7 +104,9 @@ initRoom();
 	// var geometry = new THREE.SphereGeometry( 100, 32, 16 );
 	// load images for Skybox
 
-	renderer = new THREE.WebGLRenderer();
+	renderer = new THREE.WebGLRenderer({alpha:true});
+	renderer.setClearColor( 0x000000, 0 ); // the default
+
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.autoClear = false;
 	windowHalfX = window.innerWidth / 2,
@@ -210,6 +197,7 @@ function animate(){
 
     if (moveNext == true){
     	turning = false;
+
     	moveToNextRoom();
     }
 
@@ -244,13 +232,17 @@ function animate(){
 			inc = 0;
 			lastTime = time;  
 			turning = false;
+			if (currentRoom['walls'][side] == undefined)
+				$('#side-title').html('')
+			else 
+			$('#side-title').html(currentRoom['walls'][side].title)
 
 			// group.rotation.z +=0.05719755;		
 		}
 
 		// // camera.rotation.x +=0.001;
 		// if (timeDiff >= 700){
-		// lastTime = time;  
+		lastTime = time;  
 		// inc = 0; 
 		// }
 	}
@@ -272,3 +264,21 @@ function animate(){
 
 init();
 animate();
+
+$('#extract-btn').on('click', function(){
+	if ($('#extract').is(':visible')){
+		$('#extract').fadeOut(300);
+	} else {
+		$('#path').fadeOut(100);
+		$('#extract').fadeIn(300);
+	}
+})
+
+$('#path-btn').on('click', function(){
+	if ($('#path').is(':visible')){
+		$('#path').fadeOut(300);
+	} else {
+		$('#path').fadeIn(300);
+		$('#extract').fadeOut(100);
+	}
+})
