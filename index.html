@@ -1,0 +1,157 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <!-- build:css(.tmp) styles/main.css -->
+        <link rel="stylesheet" href="styles/main.css">
+        <!-- endbuild -->
+        <script src='https://cdn.firebase.com/v0/firebase.js'></script>
+
+    </head>
+    <body>
+
+    <script type="text/javascript" src="scripts/howler.min.js"></script>
+
+    <div id='bttns'>
+        <div class='bttn' id='players-btn'> Players </div>
+        <div class='bttn' id='journey-btn'> Journey </div>
+        <div class='bttn' id='user-btn'> User </div>
+    </div>
+    <div id='extract' class='hover-sec'>
+    </div>
+
+    <div id='path' class='hover-sec'>
+        <div id='pcap'></div>
+        <br>
+        <b>
+        <div id='ptitle'></div>
+        <b>
+    
+    </div>
+
+    <div id='roomlists'>
+            <div id='label'> Players in my room : </div>
+
+        <ul id='myroom'>
+        </ul>
+            <div id='label'> Players in other rooms: </div>
+
+        <ul id='notmyroom'>
+
+        </ul>
+    </div>
+
+    <div id='userinput'>
+    Set username :
+    <input type='text' value='fsadfasd'>
+    </div>
+
+    <div id='title'>
+        <b><div id='ttitle'></div></b>
+        <br>
+
+         <div id='tcap'></div>
+
+    </div>
+
+    <div id='side-title'></div>
+
+        <!-- <div id="container" style='background-color:white;'>
+        </div> -->
+<script src="bower_components/three.js/three.min.js"></script>
+<script src="http://mrdoob.github.com/three.js/examples/fonts/helvetiker_regular.typeface.js"></script>
+
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X');ga('send','pageview');
+        </script>
+
+        <!-- build:js scripts/vendor.js -->
+        <!-- bower:js -->
+        <script src="bower_components/jquery/jquery.js"></script>
+        <!-- endbower -->
+        <!-- endbuild -->
+
+
+
+        <script type="x-shader/x-vertex" id="vertexShader">
+
+            varying vec3 vWorldPosition;
+
+            void main() {
+
+                vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+                vWorldPosition = worldPosition.xyz;
+
+                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+            }
+
+        </script>
+
+        <script type="x-shader/x-fragment" id="fragmentShader">
+
+            uniform vec3 topColor;
+            uniform vec3 bottomColor;
+            uniform float offset;
+            uniform float exponent;
+
+            varying vec3 vWorldPosition;
+
+            void main() {
+
+                float h = normalize( vWorldPosition + offset ).y;
+                gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( h, exponent ), 0.0 ) ), 1.0 );
+
+            }
+
+        </script>
+
+
+        <script src='scripts/skycube.js'></script>
+        <script src='scripts/wiky.js/wiky.js'></script>
+        <script src='scripts/hexagon.js'></script>
+        <script src="scripts/room.js"></script>
+
+        <!-- build:js scripts/main.js -->
+        <script src="scripts/test-skydome.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js(.tmp) scripts/coffee.js -->
+        <script src="scripts/hello.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js scripts/plugins.js -->
+        <script src="bower_components/sass-bootstrap/js/bootstrap-affix.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-alert.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-dropdown.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-tooltip.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-modal.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-transition.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-button.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-popover.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-typeahead.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-carousel.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-scrollspy.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-collapse.js"></script>
+        <script src="bower_components/sass-bootstrap/js/bootstrap-tab.js"></script>
+        <!-- endbuild -->
+</body>
+</html>

@@ -1,0 +1,42 @@
+{
+  "name": "wiky.js",
+  "version": "0.0.1",
+  "description": "Wiki text parser",
+  "main": "wiky.js",
+  "author": {
+    "name": "Tanin Na Nakorn",
+    "email": "tanin47@yahoo.com"
+  },
+  "contributors": [
+    {
+      "name": "Dav Glass",
+      "email": "davglass@gmail.com"
+    }
+  ],
+  "keywords": [
+    "mediawiki",
+    "wiki",
+    "parser"
+  ],
+  "bugs": {
+    "url": "https://github.com/davglass/wiky.js/issues"
+  },
+  "licenses": [
+    {
+      "type": "WTFPL",
+      "url": "http://sam.zoy.org/wtfpl/"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davglass/wiky.js.git"
+  },
+  "readme": "Wiky.js - a javascript library to convert Wiki Markup language to HTML.\n=======================\n\n(It is buggy, please use with care)\n\nWiky.js is a javascript library that converts Wiki Markup language to HTML.\n\n\nHow to use it\n-------------------\nInclude wiki.js into your HTML file. Wiky.js has only one function, which is wiky.process(wikitext).\n\nPlease see index.html for an example.\n\n*wiky.js does not depend on jQuery, which is included for testing purpose.\n\n\n\nSupported Syntax\n-------------------\n* == Heading ==\n* === Subheading ===\n* [http://www.url.com Name of URLs]\n* [[File:http://www.url.com/image.png Alternative Text]]\n* -------------------- (Horizontal line)\n* : (Indentation)\n* # Ordered bullet point\n* * Unordered bullet point\n\n\n\nContributors\n-------------------\n\nTanin Na Nakorn\n\nTanun Niyomjit (Designer)\n\nDav Glass [davglass]\n\nNPM\n---\n\n```\n$ npm install wiky.js\n\n$ npm install https://github.com/tanin47/wiky.js/tarball/master\n```\n\n```\nvar wiky = require('wiky.js');\n\nvar html = wiky.process('<string of wiki code>', {});\n\nvar html = wiky.process('<string of wiki code>', { 'link-image': false });\n```\n\n\nOptions\n-------\n\nIt only supports one option at the moment: `link-image`\n\nSetting this to `false` will tell `wiky.js` to not imbed CSS into the markup for link icons.\n\nLicense\n---------\n\nDo What The Fuck You Want To Public License (http://sam.zoy.org/wtfpl/)\n\n0. You just DO WHAT THE FUCK YOU WANT TO.\n\n",
+  "readmeFilename": "Readme.md",
+  "_id": "wiky.js@0.0.1",
+  "dist": {
+    "shasum": "721fadd3367fc2e3ea46518b162a3f5e33e5bd58"
+  },
+  "_from": "wiky.js@",
+  "_resolved": "https://registry.npmjs.org/wiky.js/-/wiky.js-0.0.1.tgz"
+}
