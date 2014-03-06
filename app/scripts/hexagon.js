@@ -4,7 +4,7 @@
 Hexagon = function(r,d, cx, cy, color){
 
 	// Hexagon geometry
-	var hexagon = new THREE.Geometry();
+	this.hexagon = new THREE.Geometry();
 	hexagon.vertices.push( new THREE.Vector3( cx+r*0.87, cy+r*0.5, 0 ) );
 	hexagon.vertices.push( new THREE.Vector3( cx+r*0.87, cy+r*0.5, -d ) );
 

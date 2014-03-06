@@ -9,36 +9,13 @@ initRoom = function(){
 
 		id = data['query']['random'][0].id
 		title = data['query']['random'][0].title
-		getRoom(id,title)
-		// title = data['query']['pages'][id].title;
-		// $.getJSON("https://en.wikipedia.org/w/api.php?action=query&format=json&pageids="+id+"&generator=links&gpllimit=500&callback=?", function(data) {
-		//     console.log(data); d= data;
-		//     room = {};
-		//     pages = []
-		//     //get all pages
-		//     for (i in d['query']['pages']) pages.push( d['query']['pages'][i] )
-		//     	console.log(pages.length)
-		//     //get 6 random ones
-		// 	stop  = Math.min(6, pages.length);
-		// 	walls = []
-		// 	for(var i = 0;i<stop;i++){
-		// 		k = Math.floor(Math.random()*(pages.length-1))
-		// 		walls[i]={}
-		// 		walls[i].id = pages[k].pageid;
-		// 		walls[i].title = pages[k].title;
-		// 		walls[i].txt = ''
-		// 	}
-		// 	currentRoom.walls = walls;
-		// 	currentRoom.title = title;
-		// 	currentRoom.txt = 'first text'
-		// 	currentRoom.chatter = 0.1
-		// 	// displayNewRoom(room);
-
-		// });		
+		getRoom(id,title)	
 	});
 }
 
+
 getRoom = function(id, title){
+
 
 		$.getJSON("https://en.wikipedia.org/w/api.php?action=query&format=json&pageids="+id+"&generator=links&plnamespace=0&gpllimit=100&callback=?", function(data) {
 	    console.log(data); d= data;
@@ -50,16 +27,38 @@ getRoom = function(id, title){
 		stop  = Math.min(6, pages.length);
 		console.log(pages.length)
 		walls = []
-		for(var i = 0;i<stop;i++){
-			k = Math.floor(Math.random()*(pages.length-1))
+		var k = Math.floor(pages.length/6);
+		for (i=0;i<5;i++){
+			if (i*k >= pages.length)
+				break;
 			walls[i]={}
-			walls[i].id = pages[k].pageid;
-			walls[i].title = pages[k].title;
-			console.log(walls[i].title)
+			walls[i].id = pages[k*i].pageid;
+			walls[i].title = pages[k*i].title;
 			walls[i].txt = ''
 		}
+		if (prevId != undefined){
+			walls.push({
+				id : prevId,
+				title : prevTitle,
+				txt : ''
+			})
+		} else if (i*k<pages.length){
+			walls[i]={}
+			walls[i].id = pages[k*i].pageid;
+			walls[i].title = pages[k*i].title;
+
+		}
+		// for(var i = 0;i<stop;i++){
+		// 	k = Math.floor(Math.random()*(pages.length-1))
+		// 	walls[i]={}
+		// 	walls[i].id = pages[k].pageid;
+		// 	walls[i].title = pages[k].title;
+		// 	console.log(walls[i].title)
+		// 	walls[i].txt = ''
+		// }
 		currentRoom.walls = walls;
-		currentRoom.title = title
+		currentRoom.title = title;
+		currentRoom.id= id;
 		// currentRoom.txt = 'first text'
 		currentRoom.chatter = 0.1
 		displayNewRoom(room);
@@ -67,10 +66,7 @@ getRoom = function(id, title){
 		pathTitles.push(currentRoom.title);
 		for (var i=0;i<pathTitles.length-1;i++)
 			$('#ptitle').html( $('#ptitle').html() + pathTitles[i] + ' | ' )
-
 		$('#ptitle').html( $('#ptitle').html() + pathTitles[pathTitles.length-1])
-		// addText();
-
 	});
 
 	// get extract
@@ -80,20 +76,36 @@ getRoom = function(id, title){
 		currentRoom.txt = extract
 		$('#extract').html(extract);
 		// $('#extract').css({'margin-top': ((-1* ($('#extract').height()) /2)-50) } )
+
 		sentences = extract.replace(/\.+/g,'.|').replace(/\?/g,'?|').replace(/\!/g,'!|').split("|");
 		i = Math.floor(Math.random()*(sentences.length-1))
-		console.log(i)
-		$('#tcap').html(sentences[i]);
+		$('#tcap').html(sentences[0]);
 		path += sentences[i];
 		$('#pcap').html(path);
 
 	});
-
 }
+
 
 displayNewRoom = function( room ){
 	// currentRoom = room;
 	$('#ttitle').html(  room.title )
+}
+
+
+updateRoomColor = function(i){
+
+
+	cols = [0x074c3c, 0x00392b]
+	// cols = [0x34495e, 0x2c3e50]
+	j = 0;
+for ( var i = 0; i < hexagon.faces.length; i +=2 ) {
+	col = cols[j]
+	j = (j+1)%2
+    hexagon.faces[ i ].color.setHex( col  );
+    hexagon.faces[ i+1 ].color.setHex( col );
+}
+
 }
 
 moveToNextRoom = function(){
@@ -118,11 +130,16 @@ moveToNextRoom = function(){
 			turning = true;
 			console.log('undefined')
 		} else {
+		prevId = currentRoom.id;
+		prevTitle = currentRoom.title
+		console.log('prev Id is set to '+prevId )
 			getRoom(currentRoom.walls[side].id, currentRoom.walls[side].title )
-			// group.rotation.z = 1.04719755*side + 0.5;
+			group.rotation.z = mult*1.04719755*side + 0.5;
 			oldVol = volume
 			newVol = room.chatter
-			$('#side-title').fadeOut(100);
+			$('#side-title').fadeOut(600);
+			$('#side-title').css({'font-size':'3em'});
+
 		}
 	}
 	// move forward
@@ -134,12 +151,16 @@ moveToNextRoom = function(){
 
 	}
 	// reposition camera at back of room
-	if (camera.position.y==110 || camera.position.y==111){
+	if (camera.position.y==100 || camera.position.y==101){
 		camera.position.y = -105;
-					$('#side-title').fadeIn(100);
+		$('#side-title').html(currentRoom['walls'][side].title);
 
-		// **************** display new text content!!!!!!!
-		
+		$('#side-title').fadeIn(600);
+		$('#side-title').css({'font-size':'2em'});
+
+		//update color of room 
+		// updateRoomColor(step);
+		//display new room content
 		// displayNewRoom(room);
 	}
 

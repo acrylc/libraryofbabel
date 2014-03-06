@@ -65,7 +65,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ced6d8', end
 	position:fixed;
 	top:50px;
 	right:50px;
-	font-size:01em;
+	font-size:1.3em;
 	color:black;
 	width: 25%;
 	line-height: 1.3em;
@@ -74,9 +74,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ced6d8', end
 	font-weight:100;
 	border-left: 5px solid black;
 	padding-left: 15px;
-	text-transform:uppercase;
+	//text-transform:uppercase;
 
 	b em {
+		font-size:1em;
 		text-transform:uppercase;
 
 		font-weight:800;
@@ -148,13 +149,15 @@ background:white;
 
 #side-title{
 	position:fixed;
-	top:400px;
+	top:450px;
 	width:30%;
 	margin-left: 35%;
 	text-align:center;
 	color:white;
-	font-size:3em;
-	font-weight:700;
-	color:rgba(100,20,30,0.5);
+	font-size:2em;
+	font-weight:100;
+	color:rgb(230,225,225);
 	line-height:1em;
+	letter-spacing:1px;
+	@include transition(font-size 300 ease-in)
 }

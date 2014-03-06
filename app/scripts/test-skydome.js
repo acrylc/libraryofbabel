@@ -22,7 +22,8 @@ var newVol
 var textMesh
 var path = "";
 var pathTitles = [];
-
+var turns = []
+var prevId, prevTitle
 
 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
@@ -43,7 +44,7 @@ function init() {
 	// 	{title: 'Wall 6', txt :''}
 	// ]
 	// room.chatter = 0.5;
-initRoom();
+	initRoom();
 
 	// create camera
 	camera = new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 1, 100000 );
@@ -121,7 +122,7 @@ initRoom();
 	container.appendChild( renderer.domElement );
 	window.addEventListener( 'resize', onWindowResize, false );
 	render();
-	crowd.play();
+	// crowd.play();
 }
 
 function onWindowResize() {
@@ -149,7 +150,7 @@ function render() {
 	var timer = 0.0001 * Date.now();
 	renderer.render( scene, camera );
 	    // crowd.play();
-    crowd.volume(volume);
+    // crowd.volume(volume);
 
 	// camera.position.x += ( mouseX - camera.position.x ) * .05;
 	// camera.position.y += ( - mouseY - camera.position.y ) * .05;
@@ -168,12 +169,69 @@ var material2 = new THREE.MeshBasicMaterial({
 	color:0xfa1a1F
 })
 
+// keyboard control for moving forward, next, back
 $(document).keydown(function(evt) {
+    
+    // on space move next
     if (evt.keyCode == 32) {
       space = true;
       moveNext= true;
     }
+    if (evt.keyCode == 37) {
+		turns.push(1);
+	}
+	if (evt.keyCode == 39){
+	    turns.push(2);
+	}
+
 });
+
+// camera.position.y += 0.01;
+animateTurn = function(time){
+	if (turns[0] == 1)
+		mult = -1;
+	if (turns[0] == 2)
+		mult = 1;
+	if ( inc < 1.04719755   ){
+		var axis = new THREE.Vector3( 0, 0, 1 );
+		var angle = -0.05;
+		var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
+		inc += 0.25;
+		group.rotation.z += mult*0.25;		
+	}
+	camera.lookAt(lookAt);
+	// camera.rotation.x = ( Math.PI / 90)
+
+	if ( inc >= 1.0){
+		// var axis = new THREE.Vector3( 0, 0, 1 );
+		// var angle = -0.05;
+		// var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
+		inc +=0.04719755;
+		// lookAt.applyMatrix4( matrix );
+		group.rotation.z =  mult* 1.04719755*side + 0.5 ;
+
+		if (turns[0] == 1){
+			side = (side-1)
+			if (side==-1) side=5
+		} else if (turns[0]==2)
+			side = (side+1)%6;
+		
+		inc = 0;
+		lastTime = time;  
+		turning = false;
+		turns.pop();
+		if (currentRoom['walls'][side] == undefined)
+			$('#side-title').html('')
+		else 
+		$('#side-title').html(currentRoom['walls'][side].title)
+
+		// group.rotation.z +=0.05719755;		
+	}
+
+
+	lastTime = time;  
+
+}
 
 
 
@@ -201,57 +259,14 @@ function animate(){
     	moveToNextRoom();
     }
 
-    // camera.position.y += 0.01;
-    animateTurn = function(){
-		// rotate hexagon every 800 sec
-		if ( inc < 1.04719755   ){
-		// hexagon.rotation.z += 0.0698;
-		// textMesh.applyMatrix( new THREE.Matrix4().makeTranslation( 0, 0, 0 ) );
+	// if (timeDiff >= 350 && moveNext==false)
+	// 	turning = true;
 
-			var axis = new THREE.Vector3( 0, 0, 1 );
-			var angle = -0.05;
-			var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
-			inc +=0.1;
-			// lookAt.applyMatrix4( matrix );
-			group.rotation.z +=0.1;		
+	if (turns.length!=0 ){
+		if (turns[0] == 1 || 2)
+		    animateTurn(time);
 
-
-		// lookAt.rotation.z += 0.0698;
-		}
-		camera.lookAt(lookAt);
-		// camera.rotation.x = ( Math.PI / 90)
-
-		if ( inc >= 1.0){
-			// var axis = new THREE.Vector3( 0, 0, 1 );
-			// var angle = -0.05;
-			// var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
-			inc +=0.04719755;
-			// lookAt.applyMatrix4( matrix );
-			group.rotation.z =  1.04719755*side + 0.5 ;
-			side = (side+1)%6;
-			inc = 0;
-			lastTime = time;  
-			turning = false;
-			if (currentRoom['walls'][side] == undefined)
-				$('#side-title').html('')
-			else 
-			$('#side-title').html(currentRoom['walls'][side].title)
-
-			// group.rotation.z +=0.05719755;		
-		}
-
-		// // camera.rotation.x +=0.001;
-		// if (timeDiff >= 700){
-		lastTime = time;  
-		// inc = 0; 
-		// }
 	}
-
-	if (timeDiff >= 350 && moveNext==false)
-		turning = true;
-
-	if (turning == true)
-		    animateTurn();
 
 
     // request new frame
