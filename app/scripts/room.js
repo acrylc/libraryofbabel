@@ -1,4 +1,4 @@
-moveStep = 2.5
+moveStep = 5
 steps = 110/moveStep
 var d
 
@@ -15,6 +15,27 @@ initRoom = function(){
 
 
 getRoom = function(id, title){
+
+		currentRoom.title = title;
+		currentRoom.id = id;
+
+		playerRoomRef.set(title);
+
+		// check all players and place them in same room
+		players = $('#myroom .pli');
+		for (i=0;i<players.length;i++){
+			p = players[i];
+			if ($(p).data().room!=title){
+				$(p).appendTo($('#notmyroom'))
+			}
+		}
+		players = $('#notmyroom .pli');
+		for (i=0;i<players.length;i++){
+			p = players[i];
+			if ($(p).data().room==title){
+				$(p).appendTo($('#myroom'))
+			}
+		}
 
 
 		$.getJSON("https://en.wikipedia.org/w/api.php?action=query&format=json&pageids="+id+"&generator=links&plnamespace=0&gpllimit=100&callback=?", function(data) {
@@ -57,7 +78,6 @@ getRoom = function(id, title){
 		// 	walls[i].txt = ''
 		// }
 		currentRoom.walls = walls;
-		currentRoom.title = title;
 		currentRoom.id= id;
 		// currentRoom.txt = 'first text'
 		currentRoom.chatter = 0.1
@@ -134,11 +154,11 @@ moveToNextRoom = function(){
 		prevTitle = currentRoom.title
 		console.log('prev Id is set to '+prevId )
 			getRoom(currentRoom.walls[side].id, currentRoom.walls[side].title )
-			group.rotation.z = mult*1.04719755*side + 0.5;
+			group.rotation.z = mult*Math.PI*60/180*side + Math.PI*90/180;
 			oldVol = volume
 			newVol = room.chatter
-			$('#side-title').fadeOut(600);
-			$('#side-title').css({'font-size':'3em'});
+			$('#side-title').fadeOut(500);
+			$('#side-title').css({'font-size':'2.2em'});
 
 		}
 	}
@@ -155,7 +175,7 @@ moveToNextRoom = function(){
 		camera.position.y = -105;
 		$('#side-title').html(currentRoom['walls'][side].title);
 
-		$('#side-title').fadeIn(600);
+		$('#side-title').fadeIn(500);
 		$('#side-title').css({'font-size':'2em'});
 
 		//update color of room 

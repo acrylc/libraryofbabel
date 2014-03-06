@@ -20,9 +20,11 @@
 
     <script type="text/javascript" src="scripts/howler.min.js"></script>
 
-    <div class='bttn' id='extract-btn'> Article Extract </div>
-    <div class='bttn' id='path-btn'> My Journey </div>
-
+    <div id='bttns'>
+        <div class='bttn' id='players-btn'> Players </div>
+        <div class='bttn' id='journey-btn'> Journey </div>
+        <div class='bttn' id='user-btn'> User </div>
+    </div>
     <div id='extract' class='hover-sec'>
     </div>
 
@@ -35,13 +37,29 @@
     
     </div>
 
+    <div id='roomlists'>
+            <div id='label'> Players in my room : </div>
+
+        <ul id='myroom'>
+        </ul>
+            <div id='label'> Players in other rooms: </div>
+
+        <ul id='notmyroom'>
+
+        </ul>
+    </div>
+
+    <div id='userinput'>
+    Set username :
+    <input type='text' value='fsadfasd'>
+    </div>
+
     <div id='title'>
-        <div id='tcap'></div>
+        <b><div id='ttitle'></div></b>
         <br>
-<!--         <br>
- -->        <b><em>
-        <div id='ttitle'></div>
-        <b></em>
+
+         <div id='tcap'></div>
+
     </div>
 
     <div id='side-title'></div>

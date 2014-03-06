@@ -12,7 +12,9 @@ var moveNext = false;
 var turnInc = 1;
 var turning = true;
 var side = 1;
-var currentRoom = {}
+var currentRoom = {
+	id:-1
+}
 var crowd = new Howl({
 	urls: ['crowd-talking.mp3']
 });
@@ -24,6 +26,7 @@ var path = "";
 var pathTitles = [];
 var turns = []
 var prevId, prevTitle
+var playerName, playerId, playerRoomRef, nameRef
 
 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
@@ -31,23 +34,42 @@ function init() {
 
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
-	// room = {}
-	// // room objects has : title, caption (random str), wall[] with text and titles, 
-	// room.title = 'The Library of babel'
-	// room.txt = 'Despite — indeed, because of — this glut of information, all books are totally useless to the reader, leaving the librarians in a state of suicidal despair.'
-	// room.walls = [
-	// 	{title: 'Wall 1', txt :''},
-	// 	{title: 'Wall 2', txt :''},
-	// 	{title: 'Wall 3', txt :''},
-	// 	{title: 'Wall 4', txt :''},
-	// 	{title: 'Wall 5', txt :''},
-	// 	{title: 'Wall 6', txt :''}
-	// ]
-	// room.chatter = 0.5;
+	
+
+	// initalize user in firebase
+    var usersRef = new Firebase('https://libraryofbabel.firebaseio.com/players/');
+    playerName = Math.random().toString(36).substring(7);
+    $('input').val(playerName);
+	t = usersRef.push({'name' : playerName});
+	playerId = t.name();
+    playerRoomRef = new Firebase('https://libraryofbabel.firebaseio.com/players/'+playerId+'/room/');
+
+    nameRef = new Firebase('https://libraryofbabel.firebaseio.com/players/'+playerId+'/name/');
+    // listen to all other users in player list
+
 	initRoom();
+ 
+ 	usersRef.on('child_added', function(childSnapshot, prevChildName) {
+		//console.log(childSnapshot.ref());
+		pli = $('<li class="pli"></li>');
+		$(pli).data({'name':childSnapshot.val().name, 'room':childSnapshot.val().room})
+		childSnapshot.ref().on('value', function(cs, ps){
+			//console.log('value changed');
+			//console.log(cs.val());
+			$(pli).data({'name':cs.val().name, 'room':cs.val().room})
+			if (cs.val().room == currentRoom.title){
+				pli.html( cs.val().name )
+				pli.prependTo($('#myroom'))
+			}
+			else{
+				pli.html( '<div id="pname"> '+cs.val().name + ' : </div>  <div id="proom"> ' + cs.val().room +'</div>' )
+				pli.prependTo($('#notmyroom'))
+			}
+		});
+	});
 
 	// create camera
-	camera = new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 1, 100000 );
+	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 100000 );
 	camera.position.y = 0;// -400;
 	camera.position.z = -35;//400;
 	camera.position.x = 0;
@@ -208,7 +230,7 @@ animateTurn = function(time){
 		// var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
 		inc +=0.04719755;
 		// lookAt.applyMatrix4( matrix );
-		group.rotation.z =  mult* 1.04719755*side + 0.5 ;
+		group.rotation.z =  mult* 1.04719755*side + Math.PI/180*90 ;
 
 		if (turns[0] == 1){
 			side = (side-1)
@@ -280,14 +302,24 @@ function animate(){
 init();
 animate();
 
-$('#extract-btn').on('click', function(){
-	if ($('#extract').is(':visible')){
-		$('#extract').fadeOut(300);
+$('#players-btn').on('click', function(){
+	if ($('#roomlists').is(':visible')){
+		$('#roomlists').fadeOut(150);
 	} else {
-		$('#path').fadeOut(100);
-		$('#extract').fadeIn(300);
+		$('#userinput').fadeOut(100);
+		$('#roomlists').fadeIn(150);
 	}
 })
+
+$('#user-btn').on('click', function(){
+	if ($('#userinput').is(':visible')){
+		$('#userinput').fadeOut(150);
+	} else {
+		$('#roomlists').fadeOut(100);
+		$('#userinput').fadeIn(150);
+	}
+})
+
 
 $('#path-btn').on('click', function(){
 	if ($('#path').is(':visible')){
@@ -297,3 +329,8 @@ $('#path-btn').on('click', function(){
 		$('#extract').fadeOut(100);
 	}
 })
+
+$( "input[type='text']" ).change(function() {
+  // Check inp ut( $( this ).val() ) for validity here
+  nameRef.set( $( this ).val() );
+});
