@@ -49,6 +49,12 @@ function init() {
 
 	initRoom();
  
+	winRef = new Firebase('https://libraryofbabel.firebaseio.com/win/');
+
+ 	winRef.on('child_added', function(childSnapshot, prevChildName) {
+ 		displayWin( childSnapshot.val() )
+	});
+
  	usersRef.on('child_added', function(childSnapshot, prevChildName) {
 		//console.log(childSnapshot.ref());
 		pli = $('<li class="pli"></li>');
@@ -308,6 +314,8 @@ $('#players-btn').on('click', function(){
 	} else {
 		$('#userinput').fadeOut(100);
 		$('#roomlists').fadeIn(150);
+		$('#journey').fadeOut(100);
+
 	}
 })
 
@@ -317,16 +325,18 @@ $('#user-btn').on('click', function(){
 	} else {
 		$('#roomlists').fadeOut(100);
 		$('#userinput').fadeIn(150);
+		$('#journey').fadeOut(100);
 	}
 })
 
 
-$('#path-btn').on('click', function(){
-	if ($('#path').is(':visible')){
-		$('#path').fadeOut(300);
+$('#journey-btn').on('click', function(){
+	if ($('#journey').is(':visible')){
+		$('#journey').fadeOut(300);
 	} else {
-		$('#path').fadeIn(300);
-		$('#extract').fadeOut(100);
+		$('#journey').fadeIn(300);
+		$('#userinput').fadeOut(100);
+		$('#roomlists').fadeOut(100);
 	}
 })
 
@@ -334,3 +344,4 @@ $( "input[type='text']" ).change(function() {
   // Check inp ut( $( this ).val() ) for validity here
   nameRef.set( $( this ).val() );
 });
+

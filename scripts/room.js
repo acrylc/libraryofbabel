@@ -2,15 +2,24 @@ moveStep = 5
 steps = 110/moveStep
 var d
 
+displayWin=function(n){
+	$('#winmsg').html(n + 'just reached The Big O Notation!')
+	$('#winmsg').fadeIn(300).delay(1500).fadeOut(300);
+}
+
 initRoom = function(){
 
-	str = 'http://en.wikipedia.org/w/api.php?action=query&format=json&rnnamespace=0&list=random&rnlimit=1'+"&callback=?"
-	$.getJSON(str, function(data) {
-
-		id = data['query']['random'][0].id
-		title = data['query']['random'][0].title
+	id = 192303
+	title = 'The Library of Babel'
 		getRoom(id,title)	
-	});
+
+	// str = 'http://en.wikipedia.org/w/api.php?action=query&format=json&rnnamespace=0&list=random&rnlimit=1'+"&callback=?"
+	// $.getJSON(str, function(data) {
+
+	// 	id = data['query']['random'][0].id;
+	// 	title = data['query']['random'][0].title
+	// 	getRoom(id,title)	
+	// });
 }
 
 
@@ -18,6 +27,8 @@ getRoom = function(id, title){
 
 		currentRoom.title = title;
 		currentRoom.id = id;
+
+		$('#journey').prepend('<div>'+title+'</div>');
 
 		playerRoomRef.set(title);
 
@@ -37,6 +48,10 @@ getRoom = function(id, title){
 			}
 		}
 
+		if (id==44578){
+			ref = new Firebase('https://libraryofbabel.firebaseio.com/win/');
+			ref.push(playerName)
+		}
 
 		$.getJSON("https://en.wikipedia.org/w/api.php?action=query&format=json&pageids="+id+"&generator=links&plnamespace=0&gpllimit=100&callback=?", function(data) {
 	    console.log(data); d= data;
