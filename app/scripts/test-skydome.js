@@ -1,61 +1,166 @@
+var Babel = Babel || {};
+// 'use strict';
+
+Babel.Audio = {
+
+	addEvent : function (element, eventName, callback) {
+	    if (element.addEventListener) {
+	        element.addEventListener(eventName, callback, false);
+	    } else if (element.attachEvent) {
+	        element.attachEvent('on'+ eventName, callback);
+	    } else {
+	        element['on' + eventName] = callback;
+	    }
+	},
+
+	myAudio : new Audio('piano.wav'),
+	spacebar : new Audio('switch.mp3'),
+
+	init: function(){
+		this.myAudio.addEventListener('ended', function() {
+		    this.currentTime = 0;
+		    this.play();
+		}, false);
+		this.myAudio.play();
+		
+		addEvent(document, 'keydown', function (e) {
+			e = e || window.event;
+			if (e.keyCode === 32) {
+				spacebar.play();
+		    }
+		});
+	},
+};
+
+(function(){
+	// 'use strict';
+	Babel.Audio.init();
+
+}());
+
+
+function addEvent(element, eventName, callback) {
+    if (element.addEventListener) {
+        element.addEventListener(eventName, callback, false);
+    } else if (element.attachEvent) {
+        element.attachEvent('on'+ eventName, callback);
+    } else {
+        element['on' + eventName] = callback;
+    }
+}
+
+
+var myAudio = new Audio('piano.wav');
+myAudio.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
+myAudio.play();
+
+var spacebar = new Audio('switch.mp3');
+
+addEvent(document, 'keydown', function (e) {
+	e = e || window.event;
+	if (e.keyCode === 32) {
+		spacebar.play();
+    }
+});
+
+// ----- AUDIO 
+
+
+
+// 'use strict'
 
 var container;
-var skycube;
 var camera, scene, renderer;
 var mesh, lightMesh;
 var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
-var lookAt, lookAtX, lookAtZ;
+var lookAtX = 0,
+	lookAtY = 100,
+	lookAtZ = -20,
+	lookAt = new THREE.Vector3 (lookAtX,lookAtY,lookAtZ);
+
 var stop = false;
 var moveNext = false;
 var turnInc = 1;
 var turning = true;
 var side = 1;
 var currentRoom = {
-	id:-1
+	id:-1,
+	walls:[
+	]
 }
-var crowd = new Howl({
-	urls: ['crowd-talking.mp3']
-});
-var volume = 0.7;
-var oldVol 
-var newVol
-var textMesh
+
 var path = "";
 var pathTitles = [];
 var turns = []
 var prevId, prevTitle
 var playerName, playerId, playerRoomRef, nameRef
 
-document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+// document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
 
 function init() {
 
+	// Create container to display library
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
-	
 
-	// initalize user in firebase
+	initDBListeners();
+	initRoom();
+
+	// create camera
+	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 100000 );
+	camera.position.y = 0;// -400;
+	camera.position.z = -35;//400;
+	camera.position.x = 0;
+	camera.up = new THREE.Vector3(0,0,1);
+	camera.lookAt(lookAt);
+
+	// create scene
+	scene = new THREE.Scene();
+
+	// create hexgon
+	hexagon =  Hexagon(120, 50, 0,0, THREE);
+	hexagon.rotation.z = 0.523598776;
+	scene.add(hexagon);
+
+	renderer = new THREE.WebGLRenderer({alpha:true});
+	renderer.setClearColor( 0x000000, 0 ); // the default
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.autoClear = false;
+	windowHalfX = window.innerWidth / 2,
+	windowHalfY = window.innerHeight / 2,
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+
+	container.appendChild( renderer.domElement );
+	window.addEventListener( 'resize', onWindowResize, false );
+	render();
+}
+
+//Initalize all Firebase Listeners and writers
+ function initDBListeners(){
     var usersRef = new Firebase('https://libraryofbabel.firebaseio.com/players/');
     playerName = Math.random().toString(36).substring(7);
     $('input').val(playerName);
 	t = usersRef.push({'name' : playerName});
 	playerId = t.name();
     playerRoomRef = new Firebase('https://libraryofbabel.firebaseio.com/players/'+playerId+'/room/');
-
     nameRef = new Firebase('https://libraryofbabel.firebaseio.com/players/'+playerId+'/name/');
-    // listen to all other users in player list
+	winRef = new Firebase('https://libraryofbabel.firebaseio.com/win/');
 
-	initRoom();
- 
+ 	winRef.on('child_added', function(childSnapshot, prevChildName) {
+ 		displayWin( childSnapshot.val() );
+	});
+
  	usersRef.on('child_added', function(childSnapshot, prevChildName) {
-		//console.log(childSnapshot.ref());
 		pli = $('<li class="pli"></li>');
 		$(pli).data({'name':childSnapshot.val().name, 'room':childSnapshot.val().room})
 		childSnapshot.ref().on('value', function(cs, ps){
-			//console.log('value changed');
-			//console.log(cs.val());
 			$(pli).data({'name':cs.val().name, 'room':cs.val().room})
 			if (cs.val().room == currentRoom.title){
 				pli.html( cs.val().name )
@@ -67,84 +172,6 @@ function init() {
 			}
 		});
 	});
-
-	// create camera
-	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 100000 );
-	camera.position.y = 0;// -400;
-	camera.position.z = -35;//400;
-	camera.position.x = 0;
-	camera.up = new THREE.Vector3(0,0,1);
-	lookAtX = 0;//52.2;//0;
-	lookAtY = 100;//90;//0;
-	lookAtZ = -20;//0;
-	lookAt = new THREE.Vector3 (lookAtX,lookAtY,lookAtZ);
-	camera.lookAt(lookAt);
-
-	// create scene
-	scene = new THREE.Scene();
-
-	// add fog and light
-	scene.fog = new THREE.Fog( 0xffffff, 1000, 10000 );
-	var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.475 );
-	directionalLight.position.set( 100, 100, -100 );
-	scene.add( directionalLight );
-	var hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 1.25 );
-	hemiLight.color.setHSL( 0.58, 0.2, 0.9 );
-	hemiLight.groundColor.setHSL( 9, 1, 0.9 );
-	hemiLight.position.x = 500;
-	scene.add( hemiLight );
-
-	// add gradient skydome
-	var vertexShader = document.getElementById( 'vertexShader' ).textContent;
-	var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
-	var uniforms = {
-		topColor: 	 { type: "c", value: new THREE.Color( 0xff7ff ) },
-		bottomColor: { type: "c", value: new THREE.Color( 0xffffff ) },
-		offset:		 { type: "f", value: 00 },
-		exponent:	 { type: "f", value: 0.99 }
-	}
-	uniforms.topColor.value.copy( hemiLight.color );
-	scene.fog.color.copy( uniforms.bottomColor.value );
-	var skyGeo = new THREE.SphereGeometry( 4000, 32, 15 );
-	var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
-	var sky = new THREE.Mesh( skyGeo, skyMat );
-	sky.rotation.y = 0.4;
-	// scene.add( sky );
-
-
-
-	// create hexgon
-	hexagon =  Hexagon(120, 50, 0,0, 0xdadadF);
-	
-	// create and add hexagon/text group
-	group = new THREE.Object3D();//create an empty container
-	group.add( hexagon );//add a mesh with geometry to it
-	//group.add( textMesh );//add a mesh with geometry to it
-	group.rotation.z = 0.523598776;
-	scene.add(group);
-
-	// skycube = new Skycube();
-	// var geometry = new THREE.SphereGeometry( 100, 32, 16 );
-	// load images for Skybox
-
-	renderer = new THREE.WebGLRenderer({alpha:true});
-	renderer.setClearColor( 0x000000, 0 ); // the default
-
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	renderer.autoClear = false;
-	windowHalfX = window.innerWidth / 2,
-	windowHalfY = window.innerHeight / 2,
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
-	// skycube.cameraCube.aspect = window.innerWidth / window.innerHeight;
-	// skycube.cameraCube.updateProjectionMatrix();
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	renderer.setClearColor( scene.fog.color, 1 );
-
-	container.appendChild( renderer.domElement );
-	window.addEventListener( 'resize', onWindowResize, false );
-	render();
-	// crowd.play();
 }
 
 function onWindowResize() {
@@ -152,50 +179,22 @@ function onWindowResize() {
 	windowHalfY = window.innerHeight / 2,
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
-	// skycube.cameraCube.aspect = window.innerWidth / window.innerHeight;
-	// skycube.cameraCube.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
-function onDocumentMouseMove(event) {
-	mouseX = ( event.clientX - windowHalfX ) * 10;
-	mouseY = ( event.clientY - windowHalfY ) * 10;
-}
-
-function animate() {
-	requestAnimationFrame( animate );
-	render();
-}
-
 function render() {
-
 	var timer = 0.0001 * Date.now();
 	renderer.render( scene, camera );
-	    // crowd.play();
-    // crowd.volume(volume);
-
-	// camera.position.x += ( mouseX - camera.position.x ) * .05;
-	// camera.position.y += ( - mouseY - camera.position.y ) * .05;
-	// camera.lookAt( scene.position );
-	// skycube.cameraCube.rotation.copy( camera.rotation );
-
-	// // Do some optional calculations. This is only if you need to get the
-	// // width of the generated text
-	// textGeom.computeBoundingBox();
-	// textGeom.textWidth = textGeom.boundingBox.max.x - textGeom.boundingBox.min.x;
-
-	// renderer.render( skycube.sceneCube, skycube.cameraCube );
-}
+};
 
 var material2 = new THREE.MeshBasicMaterial({
 	color:0xfa1a1F
-})
+});
 
 // keyboard control for moving forward, next, back
 $(document).keydown(function(evt) {
-    
-    // on space move next
-    if (evt.keyCode == 32) {
+    // on space or arrow up move next 
+    if (evt.keyCode === 32 || evt.keyCode === 38) {
       space = true;
       moveNext= true;
     }
@@ -205,11 +204,14 @@ $(document).keydown(function(evt) {
 	if (evt.keyCode == 39){
 	    turns.push(2);
 	}
-
+	if (evt.keyCode == 40){
+	    moveBack = true;
+	    console.log('moving back')
+	}
 });
 
 // camera.position.y += 0.01;
-animateTurn = function(time){
+var animateTurn = function(time){
 	if (turns[0] == 1)
 		mult = -1;
 	if (turns[0] == 2)
@@ -219,7 +221,7 @@ animateTurn = function(time){
 		var angle = -0.05;
 		var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
 		inc += 0.25;
-		group.rotation.z += mult*0.25;		
+		hexagon.rotation.z += mult*0.25;		
 	}
 	camera.lookAt(lookAt);
 	// camera.rotation.x = ( Math.PI / 90)
@@ -230,7 +232,7 @@ animateTurn = function(time){
 		// var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
 		inc +=0.04719755;
 		// lookAt.applyMatrix4( matrix );
-		group.rotation.z =  mult* 1.04719755*side + Math.PI/180*90 ;
+		hexagon.rotation.z =  mult* 1.04719755*side + Math.PI/180*90 ;
 
 		if (turns[0] == 1){
 			side = (side-1)
@@ -242,20 +244,17 @@ animateTurn = function(time){
 		lastTime = time;  
 		turning = false;
 		turns.pop();
-		if (currentRoom['walls'][side] == undefined)
-			$('#side-title').html('')
-		else 
-		$('#side-title').html(currentRoom['walls'][side].title)
-
-		// group.rotation.z +=0.05719755;		
+		if (currentRoom.walls[side] === undefined) {
+			$('#side-title').html('');
+		}
+		else {
+			$('#side-title').html(currentRoom.walls[side].title);
+		}
+		// hexagon.rotation.z +=0.05719755;		
 	}
 
-
-	lastTime = time;  
-
-}
-
-
+	lastTime = time;
+};
 
   // revolutions per second
 var angularSpeed = 0.2; 
@@ -267,37 +266,23 @@ function animate(){
     var time = (new Date()).getTime();
     var timeDiff = time - lastTime;
     var angleChange = angularSpeed * timeDiff * 2 * Math.PI / 1000;
-    
 
-    // if (timeDiff >= 700 && turning==true){
-    // 	lastTime = time;
-    // 	hexagon.rotation.z = turnInc * 1.04;
-    // 	turnInc = (turnInc+1)%7;
-    // }
-
-    if (moveNext == true){
+    if (moveNext == true) {
     	turning = false;
 
     	moveToNextRoom();
     }
 
-	// if (timeDiff >= 350 && moveNext==false)
-	// 	turning = true;
-
-	if (turns.length!=0 ){
+	if (turns.length!=0 ) {
 		if (turns[0] == 1 || 2)
 		    animateTurn(time);
-
 	}
 
-
     // request new frame
-    requestAnimationFrame(function(){
+    requestAnimationFrame( function() {
         animate();
     });
 }
-
-
 
 init();
 animate();
@@ -308,6 +293,8 @@ $('#players-btn').on('click', function(){
 	} else {
 		$('#userinput').fadeOut(100);
 		$('#roomlists').fadeIn(150);
+		$('#journey').fadeOut(100);
+		$('#path').fadeOut(100);
 	}
 })
 
@@ -317,16 +304,30 @@ $('#user-btn').on('click', function(){
 	} else {
 		$('#roomlists').fadeOut(100);
 		$('#userinput').fadeIn(150);
+		$('#journey').fadeOut(100);
+		$('#path').fadeOut(100);
 	}
 })
 
+$('#journey-btn').on('click', function(){
+	if ($('#journey').is(':visible')){
+		$('#journey').fadeOut(300);
+	} else {
+		$('#journey').fadeIn(300);
+		$('#userinput').fadeOut(100);
+		$('#roomlists').fadeOut(100);
+		$('#path').fadeOut(100);
+	}
+})
 
 $('#path-btn').on('click', function(){
 	if ($('#path').is(':visible')){
 		$('#path').fadeOut(300);
 	} else {
 		$('#path').fadeIn(300);
-		$('#extract').fadeOut(100);
+		$('#userinput').fadeOut(100);
+		$('#roomlists').fadeOut(100);
+		$('#journey').fadeOut(100);
 	}
 })
 
@@ -334,3 +335,4 @@ $( "input[type='text']" ).change(function() {
   // Check inp ut( $( this ).val() ) for validity here
   nameRef.set( $( this ).val() );
 });
+

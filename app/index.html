@@ -20,11 +20,16 @@
 
     <script type="text/javascript" src="scripts/howler.min.js"></script>
 
+    <div id='winmsg'></div>
+
     <div id='bttns'>
         <div class='bttn' id='players-btn'> Players </div>
         <div class='bttn' id='journey-btn'> Journey </div>
         <div class='bttn' id='user-btn'> User </div>
+        <div class='bttn' id='path-btn'> Path </div>
     </div>
+
+
     <div id='extract' class='hover-sec'>
     </div>
 
@@ -33,9 +38,11 @@
         <br>
         <b>
         <div id='ptitle'></div>
-        <b>
+        </b>
     
     </div>
+
+    <div id='journey'></div>
 
     <div id='roomlists'>
             <div id='label'> Players in my room : </div>
@@ -62,7 +69,7 @@
 
     </div>
 
-    <div id='side-title'></div>
+    <div id='side-title' class='center'></div>
 
         <!-- <div id="container" style='background-color:white;'>
         </div> -->
@@ -132,10 +139,6 @@
 
         <!-- build:js scripts/main.js -->
         <script src="scripts/test-skydome.js"></script>
-        <!-- endbuild -->
-
-        <!-- build:js(.tmp) scripts/coffee.js -->
-        <script src="scripts/hello.js"></script>
         <!-- endbuild -->
 
         <!-- build:js scripts/plugins.js -->

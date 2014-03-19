@@ -72,18 +72,17 @@ background: linear-gradient(to bottom, #e4aa6c 0%,#f3d2bb 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4aa6c', endColorstr='#f3d2bb',GradientType=0 ); /* IE6-9 */
 
 
-
 }
 
 #title{
 	z-index:100;
 	position:fixed;
-	top:50px;
-	left:50px;
-	font-size:1em;
+	top:40px;
+	left:40px;
+	font-size:0.9em;
 	color:black;
 	width: 35%;
-	line-height: 1.3em;
+	line-height: 1.2em;
 	text-align:left;
 	font-family: "Helvetica Neue", Helvetica, sans-serif;
 	font-weight:300;
@@ -102,14 +101,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4aa6c', end
 
 #bttns{
 	position:fixed;
-	top:50px;
-	right:50px;
-	width:300px;
+	top:40px;
+	right:40px;
+	width:280px;
 
 }
 .bttn{
-display:inline-block;
-	width:32%;
+	display:inline-block;
+	width:23.95%;
 	margin: 0 0.5% 0 0.5%;
 	float:left;
 	padding:5px 0 5px 0;
@@ -171,27 +170,31 @@ background:white;
 }
 
 #side-title{
-	position:fixed;
-	top:450px;
+	position:absolute;
+	// top:400px;
 	width:30%;
 	margin-left: 35%;
 	text-align:center;
 	color:white;
-	font-size:2em;
+	font-size:1.9em;
 	font-weight:100;
 	color:rgb(230,225,225);
 	line-height:1em;
 	letter-spacing:1px;
 	@include transition(font-size 500ms ease-in)
+	
+}
+.center{
+	top:50%;
 }
 
-#roomlists, #userinput{
+#roomlists, #userinput, #journey{
 	display:none;
 
 	background: rgba(250,250,250,0.3);
 	padding-left:10px;
 	position:fixed;
-	right:50px;
+	right:40px;
 	top:102px;
 	max-height: 75%;
 	overflow-y: scroll;
@@ -200,11 +203,11 @@ background:white;
 	padding:20px;
 	border-top:5px solid rgba(250,250,250,0.2);
 	border-bottom:5px solid rgba(250,250,250,0.2);
-	width:260px;
+	width:240px;
 	@include transition(height 0.3s ease-in-out	);
 	#label{
 		font-weight:700;
-		font-size:1.2em;
+		font-size:1em;
 		text-transform:uppercase;
 		padding-bottom:0.6em;
 		letter-spacing:2px;
@@ -214,21 +217,23 @@ background:white;
 		font-family: 'Proxima Nova', Helvetica, sans-serif;
 		margin-bottom:10px;
 		font-weight:400;
-		font-size:1.1em;
+		font-size:1em;
 		li{
-			line-height:1.2em;
+			line-height:1.3em;
 			padding:0.2em 0 0.2em 0;
 			}
 	}
 }
 
 #proom, #pname{
-	display:inline-block;
+display:inline-block;
 }
 
 #pname{
 	font-weight: 700;
 	color:rgb(40,40,40);
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	font-weight:700;
 }
 #proom{
 }
@@ -237,19 +242,31 @@ input[type=text]{
 	margin-top:30px;
 	background:rgba(0,0,0,0);
 	border:none;
-	border-bottom:5px solid black;
+	border-bottom:3px solid black;
 	border-radius:0;
-	font-size:2em;
+	font-size:1.8em;
 	padding:10px;
 	color:black;
 	box-shadow:none;
 	text-align:center;
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+
 
 }
 input[type=text]:focus { 
 	outline: none !important; 
-	border-bottom:5px solid white;
+	border-bottom:3px solid white;
 	box-shadow:none;
 	text-align:center;
+}
+
+#winmsg{
+	position:fixed;
+	top:100px;
+	width:100%;
+	text-align:center;
+	font-size:4em;
+	color:black;
+	font-family: "Montserrat", "Helvetica Neue", Helvetica, sans-serif;
 }
 
