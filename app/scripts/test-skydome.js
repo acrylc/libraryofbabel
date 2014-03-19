@@ -136,9 +136,11 @@ function init() {
 
 	//Create particle system
 	var particles = new THREE.Geometry;
-	for (var p = 0; p <2000; p++) {
-		var particle = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 150, Math.random() * 500 - 0);
+	for (var p = 0; p <4000; p++) {
+		var particle = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 550);
+		var particle2 = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500);
 		particles.vertices.push(particle);
+		particles.vertices.push(particle2);
 	}
 	particleMaterial = new THREE.ParticleBasicMaterial({ color: 0xeeeeee, size: 2 });
 	particleSystem = new THREE.ParticleSystem(particles, particleMaterial);
@@ -250,9 +252,9 @@ var animateTurn = function(time){
 		// var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
 		inc +=0.04719755;
 		// lookAt.applyMatrix4( matrix );
+		
 		hexagon.rotation.z =  mult* 1.04719755*side + Math.PI/180*90 ;
 		particleSystem.rotation.z += mult* 1.04719755*side + Math.PI/180*90 ;
-
 		if (turns[0] == 1){
 			side = (side-1)
 			if (side==-1) side=5
