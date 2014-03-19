@@ -110,13 +110,14 @@ function init() {
 
 	// Create container to display library
 	container = document.createElement( 'div' );
+	container.setAttribute("style", "width:100%;height:100%;position:fixed;padding:0;margin:0;z-index:0;")
 	document.body.appendChild( container );
 
 	initDBListeners();
 	initRoom();
 
 	// create camera
-	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 100000 );
+	camera = new THREE.PerspectiveCamera( 70, window.innerWidth*0.1 / window.innerHeight, 1, 100000 );
 	camera.position.y = 0;// -400;
 	camera.position.z = -35;//400;
 	camera.position.x = 0;
@@ -138,13 +139,13 @@ function init() {
 
 	//Create particle system
 	var particles = new THREE.Geometry;
-	for (var p = 0; p <4000; p++) {
+	for (var p = 0; p <20000; p++) {
 		var particle = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 550);
 		var particle2 = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500);
 		particles.vertices.push(particle);
 		particles.vertices.push(particle2);
 	}
-	particleMaterial = new THREE.ParticleBasicMaterial({ color: 0xeeeeee, size: 2 });
+	particleMaterial = new THREE.ParticleBasicMaterial({ color: 0xeeeeee, size: 0.7 });
 	particleSystem = new THREE.ParticleSystem(particles, particleMaterial);
 	scene.add(particleSystem);
 
@@ -292,10 +293,10 @@ function animate(){
 	camera.position.z += noiseInc;//400;
 	noiseY+=noiseInc;
 	if (noiseY>1){
-		noiseInc=-0.008;
+		noiseInc=-0.01;
 	}
 	if (noiseY<-1){
-		noiseInc=0.008;
+		noiseInc=0.01;
 	}
 
     var time = (new Date()).getTime();
