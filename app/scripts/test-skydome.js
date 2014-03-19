@@ -86,6 +86,7 @@ var noiseY = 0;
 var noiseInc = 0.008;
 var stop = false;
 var moveNext = false;
+var moveBack = false;
 var turnInc = 1;
 var turning = true;
 var side = 1;
@@ -99,7 +100,8 @@ var path = "";
 var pathTitles = [];
 var turns = []
 var prevId, prevTitle
-var playerName, playerId, playerRoomRef, nameRef
+var playerName, playerId, playerRoomRef, nameRef;
+var pathStack = [];
 
 // document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
@@ -205,9 +207,12 @@ $(document).keydown(function(evt) {
 	if (evt.keyCode == 39){
 	    turns.push(2);
 	}
-	if (evt.keyCode == 40){
+	if (evt.keyCode == 40 && pathStack.length>1 ){
 	    moveBack = true;
-	    console.log('moving back')
+	    console.log('moving back');
+		pathStack.pop();
+	    getPrevRoom();
+
 	}
 });
 
@@ -278,10 +283,14 @@ function animate(){
     var timeDiff = time - lastTime;
     var angleChange = angularSpeed * timeDiff * 2 * Math.PI / 1000;
 
-    if (moveNext == true) {
+    if (moveNext === true) {
     	turning = false;
-
     	moveToNextRoom();
+    }
+
+    if (moveBack === true) {
+    	turning = false;
+    	moveToPrevRoom();
     }
 
 	if (turns.length!=0 ) {
