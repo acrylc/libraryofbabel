@@ -213,10 +213,6 @@ moveToPrevRoom = function(){
 
 	// shift to proper view before moving to next room
 	if (camera.position.y==0){
-		if (currentRoom.walls[side] == undefined){
-			moveNext= false;
-			turning = true;
-		} else {
 			goTo = pathStack.pop();
 
 			if (pathStack.length>=1){
@@ -231,25 +227,25 @@ moveToPrevRoom = function(){
 			hexagon.rotation.z = mult*Math.PI*60/180*side + Math.PI*90/180;
 			$('#side-title').fadeOut(500);
 			$('#side-title').css({'font-size':'2.2em'});
-		}
+		
 	}
 	// move forward
-	if (camera.position.y<110 &&  camera.position.y >= 0){
-		camera.position.y += moveStep;
+	if (camera.position.y>-110 &&  camera.position.y <= 0){
+		camera.position.y -= moveStep;
 	}
 	// reposition camera at back of room
-	if (camera.position.y==100 || camera.position.y==101) {
-		camera.position.y = -105;
+	if (camera.position.y==-100 || camera.position.y==-101) {
+		camera.position.y = 105;
 		$('#side-title').html(currentRoom['walls'][side].title);
 		$('#side-title').fadeIn(500);
 		$('#side-title').css({'font-size':'2em'});
 	}
 
-	if (camera.position.y < 0){
-		camera.position.y += moveStep;
+	if (camera.position.y > 0){
+		camera.position.y -= moveStep;
 		stop = true;
 	}
-	if (camera.position.y == 0 || camera.position.y == -1){
+	if (camera.position.y == 0 || camera.position.y == +1){
 		camera.position.y = 0
 		moveBack= false;
 
