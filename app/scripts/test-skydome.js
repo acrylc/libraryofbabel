@@ -269,15 +269,14 @@ var inc = 0;
 // this function is executed on each animation frame
 function animate(){
   	render();
-  		// camera.position.y += 0.1;// -400;
 	camera.position.z += noiseInc;//400;
 	noiseY+=noiseInc;
-	if (noiseY>1)
+	if (noiseY>1){
 		noiseInc=-0.008;
-	if (noiseY<-1)
-				noiseInc=0.008;
-
-	// camera.position.x += 0.1;
+	}
+	if (noiseY<-1){
+		noiseInc=0.008;
+	}
 
     var time = (new Date()).getTime();
     var timeDiff = time - lastTime;
@@ -294,8 +293,9 @@ function animate(){
     }
 
 	if (turns.length!=0 ) {
-		if (turns[0] == 1 || 2)
+		if (turns[0] == 1 || 2){
 		    animateTurn(time);
+		}
 	}
 
     // request new frame

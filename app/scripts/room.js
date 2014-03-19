@@ -180,6 +180,7 @@ moveToNextRoom = function(){
 		//console.log('prev Id is set to '+prevId )
 			getRoom(currentRoom.walls[side].id, currentRoom.walls[side].title )
 			hexagon.rotation.z = mult*Math.PI*60/180*side + Math.PI*90/180;
+
 			$('#side-title').fadeOut(500);
 			$('#side-title').css({'font-size':'2.2em'});
 		}
@@ -224,6 +225,8 @@ moveToPrevRoom = function(){
 			}
 
 			getRoom(goTo[1],goTo[0])
+						$('#journey').find('div:lt(2)').remove();
+
 			hexagon.rotation.z = mult*Math.PI*60/180*side + Math.PI*90/180;
 			$('#side-title').fadeOut(500);
 			$('#side-title').css({'font-size':'2.2em'});
@@ -234,7 +237,7 @@ moveToPrevRoom = function(){
 		camera.position.y -= moveStep;
 	}
 	// reposition camera at back of room
-	if (camera.position.y==-100 || camera.position.y==-101) {
+	if (camera.position.y==-90 || camera.position.y==-91) {
 		camera.position.y = 105;
 		$('#side-title').html(currentRoom['walls'][side].title);
 		$('#side-title').fadeIn(500);
