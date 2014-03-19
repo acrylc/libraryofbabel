@@ -82,7 +82,8 @@ var lookAtX = 0,
 	lookAtY = 100,
 	lookAtZ = -20,
 	lookAt = new THREE.Vector3 (lookAtX,lookAtY,lookAtZ);
-
+var noiseY = 0;
+var noiseInc = 0.008;
 var stop = false;
 var moveNext = false;
 var turnInc = 1;
@@ -210,7 +211,7 @@ $(document).keydown(function(evt) {
 	}
 });
 
-// camera.position.y += 0.01;
+// camera.position.y += 0.008;
 var animateTurn = function(time){
 	if (turns[0] == 1)
 		mult = -1;
@@ -263,6 +264,16 @@ var inc = 0;
 // this function is executed on each animation frame
 function animate(){
   	render();
+  		// camera.position.y += 0.1;// -400;
+	camera.position.z += noiseInc;//400;
+	noiseY+=noiseInc;
+	if (noiseY>1)
+		noiseInc=-0.008;
+	if (noiseY<-1)
+				noiseInc=0.008;
+
+	// camera.position.x += 0.1;
+
     var time = (new Date()).getTime();
     var timeDiff = time - lastTime;
     var angleChange = angularSpeed * timeDiff * 2 * Math.PI / 1000;

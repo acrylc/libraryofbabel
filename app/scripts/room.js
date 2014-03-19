@@ -91,10 +91,10 @@ getRoom = function(id, title){
 		displayNewRoom(room);
 		$('#ttitle').html(  currentRoom.title );
 		pathTitles.push(currentRoom.title);
-		for (var i=0;i<pathTitles.length-1;i++){
-			$('#ptitle').html( $('#ptitle').html() + pathTitles[i] + ' | ' );
-		}
-		$('#ptitle').html( $('#ptitle').html() + pathTitles[pathTitles.length-1]);
+		// for (var i=0;i<pathTitles.length-1;i++){
+		// 	$('#ptitle').html( pathTitles[i] + ' | ' );
+		// }
+		$('#ptitle').html(  '<b>' + pathTitles[pathTitles.length-1] + '</b>' + ' | ' + $('#ptitle').html() );
 
 	});
 
@@ -133,8 +133,8 @@ moveToNextRoom = function(){
 	if (camera.position.y==0){
 		room = {}
 		
-		if (side==5) side = 0
-		else side = (side+1)
+		// if (side==0) side = 5
+		// else side = (side-1)
 
 		if (currentRoom.walls[side] == undefined){
 			moveNext= false;
