@@ -46,9 +46,9 @@ function init() {
 
 	// create camera
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth*0.1 / window.innerHeight, 1, 100000 );
-	camera.position.y = 140;// -400;
-	camera.position.z = 45;//400;
-	camera.position.x = 340;
+	camera.position.y = -420;//0;//140;// -400;
+	camera.position.z = 260;//-30;//45;//400;
+	camera.position.x = 870;//0;//340;
 	camera.up = new THREE.Vector3(0,0,1);
 	camera.lookAt(lookAt);
 
@@ -206,9 +206,23 @@ function animate(){
 	if (noiseY<-0.8){
 		noiseInc=0.01;
 	}
-	camera.position.x-=0.11;
-	camera.position.y-=0.03;
-	camera.position.z-=.11;
+	if (camera.position.x>0){
+	camera.position.x-=0.61;
+	} else {
+		camera.position.x =0 ;
+	}
+		if (camera.position.y<0){
+
+	camera.position.y+=0.25;
+	} else {
+		camera.position.y=0;
+	}
+	if (camera.position.z>-30){
+	camera.position.z-=.22;
+	} else {
+		camera.position.z = -30;
+	}
+	camera.lookAt(lookAt);
 
     var time = (new Date()).getTime();
     var timeDiff = time - lastTime;
