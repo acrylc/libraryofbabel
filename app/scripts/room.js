@@ -195,9 +195,7 @@ moveToNextRoom = function(){
 		////console.log('prev Id is set to '+prevId )
 			getRoom(currentRoom.walls[side].id, currentRoom.walls[side].title )
 			hexagon.rotation.z = mult*Math.PI*60/180*side + Math.PI*90/180;
-
-			$('#side-title').fadeOut(500);
-			$('#side-title').css({'font-size':'2.2em'});
+			$('#side-title').fadeOut(200);
 		}
 	}
 	// move forward
@@ -207,21 +205,20 @@ moveToNextRoom = function(){
 	// reposition camera at back of room
 	if (camera.position.y==100 || camera.position.y==101) {
 		camera.position.y = -105;
-		// $('#side-title').html(currentRoom['walls'][side].title);
-			$('#side-title').html(''+currentRoom.walls[side].title+'<br><br><p>'+currentRoom.walls[side].txt+'</p>');
-
-		$('#side-title').fadeIn(500);
-		$('#side-title').css({'font-size':'2em'});
+		$('#side-title').html(''+currentRoom.walls[side].title+'<br><br><p>'+currentRoom.walls[side].txt+'</p>');
 	}
 
 	if (camera.position.y < 0){
 		camera.position.y += moveStep;
 		stop = true;
+
 	}
 	if (camera.position.y == 0 || camera.position.y == -1){
 		camera.position.y = 0
 		moveNext= false;
 		turning = true;
+		$('#side-title').fadeIn(200);
+
 	}
 }
 
@@ -242,11 +239,9 @@ moveToPrevRoom = function(){
 			}
 
 			getRoom(goTo[1],goTo[0])
-						$('#journey').find('div:lt(2)').remove();
-
+			$('#journey').find('div:lt(2)').remove();
 			hexagon.rotation.z = mult*Math.PI*60/180*side + Math.PI*90/180;
-			$('#side-title').fadeOut(500);
-			$('#side-title').css({'font-size':'2.2em'});
+			$('#side-title').fadeOut(200);
 		
 	}
 	// move forward
@@ -256,11 +251,8 @@ moveToPrevRoom = function(){
 	// reposition camera at back of room
 	if (camera.position.y==-90 || camera.position.y==-91) {
 		camera.position.y = 105;
-			$('#side-title').html(''+currentRoom.walls[side].title+'<br><br><p>'+currentRoom.walls[side].txt+'</p>');
-		$('#side-title').fadeIn(500);
-		$('#side-title').css({'font-size':'2em'});
+		$('#side-title').html(''+currentRoom.walls[side].title+'<br><br><p>'+currentRoom.walls[side].txt+'</p>');
 	}
-
 	if (camera.position.y > 0){
 		camera.position.y -= moveStep;
 		stop = true;
@@ -268,7 +260,7 @@ moveToPrevRoom = function(){
 	if (camera.position.y == 0 || camera.position.y == +1){
 		camera.position.y = 0
 		moveBack= false;
-
+		$('#side-title').fadeIn(200);
 		turning = true;
 
 	}

@@ -191,21 +191,23 @@ background:white;
 
 #side-title{
 	position:absolute;
-	// top:400px;
 	width:30%;
 	margin-left: 35%;
 	text-align:center;
 	color:white;
-	font-size:2.5em;
+	font-size:2.2em;
 	font-weight:100;
 	color:rgb(230,225,225);
 	line-height:1em;
 	letter-spacing:2px;
-	// text-transform:lowercase;
-			font-family: 'Proxima Nova';
-
-
+	font-family: 'Proxima Nova';
 	@include transition(font-size 500ms ease-in);
+	a{
+		color:rgb(230,225,225);
+		&:hover{
+			color:black;
+		}
+	}
 	p{
 		font-family:'Helvetica Neue', 'Helvetica', sans-serif;
 		font-size:0.4em;
@@ -216,7 +218,6 @@ background:white;
 		line-height:1.2em;
 		text-transform:none;
 		letter-spacing:1px;
-
 	}
 	
 }

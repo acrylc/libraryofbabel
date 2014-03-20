@@ -181,7 +181,8 @@ var animateTurn = function(time){
 			$('#side-title').html('');
 		}
 		else {
-			$('#side-title').html(''+currentRoom.walls[side].title+'<br><br><p>'+currentRoom.walls[side].txt+'</p>');
+			var url = currentRoom.walls[side].title.replace(' ','_');
+			$('#side-title').html('<a href="http://wikipedia.org/wiki/'+url+'" target="blank">'+currentRoom.walls[side].title+'</a><br><br><p>'+currentRoom.walls[side].txt+'</p>');
 			// $('#side-title').html(currentRoom.walls[side].title);
 		}
 		// hexagon.rotation.z +=0.05719755;		
