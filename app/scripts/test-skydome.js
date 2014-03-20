@@ -47,8 +47,8 @@ function init() {
 	// create camera
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth*0.1 / window.innerHeight, 1, 100000 );
 	camera.position.y = -420;//0;//140;// -400;
-	camera.position.z = 260;//-30;//45;//400;
-	camera.position.x = 870;//0;//340;
+	camera.position.z = 300;//-30;//45;//400;
+	camera.position.x = 470;//0;//340;
 	camera.up = new THREE.Vector3(0,0,1);
 	camera.lookAt(lookAt);
 
@@ -66,7 +66,13 @@ function init() {
 
 	//Create particle system
 	var particles = new THREE.Geometry;
-	for (var p = 0; p <7000; p++) {
+	for (var p = 0; p <4000; p++) {
+		var particle = new THREE.Vector3(Math.random() * 1000 - 500, Math.random() * 1000 - 500, Math.random() * 500 - 550);
+		var particle2 = new THREE.Vector3(Math.random() * 1000 - 500, Math.random() * 1000 - 500, Math.random() * 500);
+		particles.vertices.push(particle);
+		particles.vertices.push(particle2);
+	}
+	for (var p = 0; p <4000; p++) {
 		var particle = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 550);
 		var particle2 = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500);
 		particles.vertices.push(particle);
@@ -207,7 +213,7 @@ function animate(){
 		noiseInc=0.01;
 	}
 	if (camera.position.x>0){
-	camera.position.x-=0.61;
+	camera.position.x-=0.3;
 	} else {
 		camera.position.x =0 ;
 	}
