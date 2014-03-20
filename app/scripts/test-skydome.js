@@ -46,7 +46,7 @@ function init() {
 
 	// create camera
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth*0.1 / window.innerHeight, 1, 100000 );
-	camera.position.y = 250;// -400;
+	camera.position.y = 350;// -400;
 	camera.position.z = 155;//400;
 	camera.position.x = 140;
 	camera.up = new THREE.Vector3(0,0,1);
@@ -196,6 +196,10 @@ var animateTurn = function(time){
 var angularSpeed = 0.2; 
 var lastTime = 0;
 var inc = 0;
+function ba(){
+	camera.lookAt( new THREE.Vector3 (lookAtX,lookAtY,lookAtZ) );
+
+}
 // this function is executed on each animation frame
 function animate(){
   	render();
@@ -208,14 +212,26 @@ function animate(){
 		noiseInc=0.01;
 	}
 	if (camera.position.x>0){
-		camera.position.x-=0.15;
+		camera.position.x-=0.25;
 	}	if (camera.position.y>0){
-		camera.position.y-=0.15;
+		camera.position.y-=0.6;
 	}
 	if (camera.position.z>-30){
-		camera.position.z-=.11;
+		camera.position.z-=.31;
 	}
 
+        	if (lookAtZ>-10){
+		lookAtZ-=2;
+		lookAt.z = lookAtZ;
+	// var l  = new THREE.Vector3 (lookAtX,lookAtY,lookAtZ);
+	// camera.lookAt( l );
+
+
+		console.log('z');
+	}
+		ba();
+
+	      renderer.render(scene, camera);
 
 
     var time = (new Date()).getTime();
@@ -241,17 +257,7 @@ function animate(){
     // request new frame
     requestAnimationFrame( function() {
         animate();
-        	if (lookAtZ>-10){
-		lookAtZ-=0.5;
-		lookAt.z = lookAtZ;
-	var l  = new THREE.Vector3 (lookAtX,lookAtY,lookAtZ);
-	(function(){
-	camera.lookAt( l );
 
-	}());
-
-		console.log('z');
-	}
 
     });
 }
