@@ -327,15 +327,16 @@ input[type=text]:focus {
 	// margin:auto;
 	margin-left:15%;
 	margin-top:5%;
-	font-size:2em;
+	font-size:1.6em;
 	position:fixed;
-	line-height:1.2em;
+	line-height:1.3em;
 	text-align:left;
 	font-weight:400;
-	font-family:"Proxima Nova";
-	letter-spacing:2px;
+	font-family:"Montserrat";
+	letter-spacing:3px;
 	color:black;
 	z-index:4;
+	color: darken(#c0392b,8%);
 }
 .intro-text{
 	display:none;

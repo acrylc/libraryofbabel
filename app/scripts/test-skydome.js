@@ -32,9 +32,9 @@ var playerName, playerId, playerRoomRef, nameRef;
 var pathStack = [];
 
 var intro = [
-	'The universe (which others call the Library) is composed of an indefinite and perhaps infinite number of hexagonal galleries',
+	'The universe (which others call the Library) is composed of an indefinite and perhaps infinite number of hexagonal galleries.',
 	'When it was proclaimed that the Library contained all books, the first impression was one of extravagant happiness. All men felt themselves to be the masters of an intact and secret treasure.',
-	'Thousands of the greedy abandoned their sweet native hexagons and rushed up the stairways, urged on by the vain intention of finding their Vindication. These pilgrims disputed in the narrow corridors, proferred dark curses, strangled each other on the divine stairways, flung the deceptive books into the air shafts, met their death cast down in a similar fashion by the inhabitants of remote regions. ',
+	'Thousands of the greedy abandoned their sweet native hexagons and rushed up the stairways, urged on by the vain intention of finding their Vindication. These pilgrims disputed in the narrow corridors, proferred dark curses, strangled each other on the divine stairways...',
 	'Others went mad.'
 ]
 // document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -240,8 +240,8 @@ function animate(){
 			$('#intro-overlay').fadeOut(300);
 			$('#project-title').fadeIn(500);
 					setTimeout(function() {
-			$('#canvas-overlay').fadeIn(300);
-			$('#project-title').fadeOut(100);
+			$('#canvas-overlay').fadeIn(400);
+			$('#project-title').fadeOut(300);
 }, 4000);
 // }());
 			// $('#canvas-overlay').fadeIn(300);
@@ -278,6 +278,12 @@ function animate(){
 init();
 animate();
 
+function skipIntro (){
+	camera.position.x=0;
+	camera.position.y=0;
+	camera.position.z=-30;
+}
+
 (function(){
 	$('#intro-overlay #t1').html(intro[0]);
 	$('#intro-overlay #t2').html(intro[1]);
@@ -296,7 +302,7 @@ animate();
 		setTimeout(function() {
   // $("#t3").fadeOut(300);
   $("#t4").fadeIn(300);
-}, 22000);
+}, 23500);
 }());
 
 
