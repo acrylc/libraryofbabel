@@ -8,7 +8,7 @@ var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 var lookAtX = 0,
 	lookAtY = 100,
-	lookAtZ = -20,
+	lookAtZ = 360,
 	lookAt = new THREE.Vector3 (lookAtX,lookAtY,lookAtZ);
 var noiseY = 0;
 var noiseInc = 0.01;
@@ -46,9 +46,9 @@ function init() {
 
 	// create camera
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth*0.1 / window.innerHeight, 1, 100000 );
-	camera.position.y = 140;// -400;
-	camera.position.z = 45;//400;
-	camera.position.x = 340;
+	camera.position.y = 250;// -400;
+	camera.position.z = 155;//400;
+	camera.position.x = 140;
 	camera.up = new THREE.Vector3(0,0,1);
 	camera.lookAt(lookAt);
 
@@ -66,9 +66,9 @@ function init() {
 
 	//Create particle system
 	var particles = new THREE.Geometry;
-	for (var p = 0; p <7000; p++) {
-		var particle = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 550);
-		var particle2 = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500);
+	for (var p = 0; p <17000; p++) {
+		var particle = new THREE.Vector3(Math.random() * 1000 - 500, Math.random() * 1000 - 500, Math.random() * 500 - 550);
+		var particle2 = new THREE.Vector3(Math.random() * 1000 - 500, Math.random() * 1000 - 500, Math.random() * 500);
 		particles.vertices.push(particle);
 		particles.vertices.push(particle2);
 	}
@@ -155,6 +155,7 @@ var animateTurn = function(time){
 		inc += 0.25;
 		hexagon.rotation.z += mult*0.25;		
 	}
+
 	camera.lookAt(lookAt);
 	// camera.rotation.x = ( Math.PI / 90)
 
@@ -206,9 +207,16 @@ function animate(){
 	if (noiseY<-0.8){
 		noiseInc=0.01;
 	}
-	camera.position.x-=0.11;
-	camera.position.y-=0.03;
-	camera.position.z-=.11;
+	if (camera.position.x>0){
+		camera.position.x-=0.15;
+	}	if (camera.position.y>0){
+		camera.position.y-=0.15;
+	}
+	if (camera.position.z>-30){
+		camera.position.z-=.11;
+	}
+
+
 
     var time = (new Date()).getTime();
     var timeDiff = time - lastTime;
@@ -233,6 +241,18 @@ function animate(){
     // request new frame
     requestAnimationFrame( function() {
         animate();
+        	if (lookAtZ>-10){
+		lookAtZ-=0.5;
+		lookAt.z = lookAtZ;
+	var l  = new THREE.Vector3 (lookAtX,lookAtY,lookAtZ);
+	(function(){
+	camera.lookAt( l );
+
+	}());
+
+		console.log('z');
+	}
+
     });
 }
 
