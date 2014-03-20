@@ -33,6 +33,13 @@ html, body{
 	position:relative;
 	background: #75C5B3;
 
+.over{
+	z-index:2;
+}
+
+a{
+	text-decoration: none !important;
+}
 
 background: #d6c2ac; /* Old browsers */
 background: -moz-linear-gradient(top,  #d6c2ac 0%, #ece0d8 100%); /* FF3.6+ */
@@ -62,16 +69,23 @@ background: linear-gradient(to bottom,  #ced6d8 0%,#e8ecec 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ced6d8', endColorstr='#e8ecec',GradientType=0 ); /* IE6-9 */
 
 
-	background: #e4aa6c; /* Old browsers */
-background: -moz-linear-gradient(top, #e4aa6c 0%, #f3d2bb 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e4aa6c), color-stop(100%,#f3d2bb)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #e4aa6c 0%,#f3d2bb 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #e4aa6c 0%,#f3d2bb 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #e4aa6c 0%,#f3d2bb 100%); /* IE10+ */
-background: linear-gradient(to bottom, #e4aa6c 0%,#f3d2bb 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4aa6c', endColorstr='#f3d2bb',GradientType=0 ); /* IE6-9 */
+	background: #E69C4E; /* Old browsers */
+background: -moz-linear-gradient(top, #E69C4E 0%, #f3d2bb 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#E69C4E), color-stop(100%,#f3d2bb)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #E69C4E 0%,#f3d2bb 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #E69C4E 0%,#f3d2bb 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #E69C4E 0%,#f3d2bb 100%); /* IE10+ */
+background: linear-gradient(to bottom, #E69C4E 0%,#f3d2bb 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#E69C4E', endColorstr='#f3d2bb',GradientType=0 ); /* IE6-9 */
 
+}
 
+#canvasContainer{
+	width:100%;
+	height:100%;
+	padding:0;
+	margin:0;
+	position:relative;
 }
 
 #title{
@@ -96,6 +110,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4aa6c', end
 		text-transform:uppercase;
 		letter-spacing: 2px;
 		font-weight:800;
+	}
+}
+
+#ttitle a{
+	color:black;
+	&:hover{
+		color:white;
 	}
 }
 
@@ -170,18 +191,39 @@ background:white;
 }
 
 #side-title{
-	position:fixed;
-	top:400px;
-	width:30%;
-	margin-left: 35%;
+	position:absolute;
+	width:40%;
+	margin-left: 30%;
 	text-align:center;
 	color:white;
-	font-size:1.9em;
+	font-size:2.2em;
 	font-weight:100;
 	color:rgb(230,225,225);
 	line-height:1em;
-	letter-spacing:1px;
-	@include transition(font-size 500ms ease-in)
+	letter-spacing:2px;
+	font-family: 'Proxima Nova';
+	@include transition(font-size 500ms ease-in);
+	a{
+		color:rgb(230,225,225);
+		&:hover{
+			color:black;
+		}
+	}
+	p{
+		font-family:'Helvetica Neue', 'Helvetica', sans-serif;
+		font-size:0.4em;
+		font-weight: 100;
+		color:white;
+		text-align:justify;
+		padding:0;
+		line-height:1.2em;
+		text-transform:none;
+		letter-spacing:1px;
+	}
+	
+}
+.center{
+	top:50%;
 }
 
 #roomlists, #userinput, #journey{
@@ -266,3 +308,65 @@ input[type=text]:focus {
 	font-family: "Montserrat", "Helvetica Neue", Helvetica, sans-serif;
 }
 
+#path{
+	z-index:3;
+}
+#article-def{
+	font-weight:600;
+	font-size:0.85em;
+	line-height:1.1em;
+}
+
+#canvas-overlay{
+	display:none;
+}
+
+#intro-overlay{
+	text-align:justify;
+	width:70%;
+	// margin:auto;
+	margin-left:15%;
+	margin-top:5%;
+	font-size:1.6em;
+	position:fixed;
+	line-height:1.3em;
+	text-align:left;
+	font-weight:400;
+	font-family:"Montserrat";
+	letter-spacing:3px;
+	color:black;
+	z-index:4;
+	color: darken(#c0392b,8%);
+}
+.intro-text{
+	display:none;
+	position:absolute;
+	top:0;
+	left:0;
+}
+#t3,#t4{
+	position:relative;
+}
+#t4{
+}
+#project-title{
+	position:absolute;
+	width:100%;
+	text-align:center;
+	font-family:'Montserrat';
+	font-size:3em;
+	letter-spacing:3px;
+	color:black;
+	text-transform:uppercase;
+	display:none;
+	p{
+		font-size:0.4em;
+	}
+}
+
+#skip-intro{
+	width:150px;
+	bottom:50px;
+	right:50px;
+	position:absolute;
+}
