@@ -1,76 +1,4 @@
 var Babel = Babel || {};
-// 'use strict';
-
-Babel.Audio = {
-
-	addEvent : function (element, eventName, callback) {
-	    if (element.addEventListener) {
-	        element.addEventListener(eventName, callback, false);
-	    } else if (element.attachEvent) {
-	        element.attachEvent('on'+ eventName, callback);
-	    } else {
-	        element['on' + eventName] = callback;
-	    }
-	},
-
-	myAudio : new Audio('piano.wav'),
-	spacebar : new Audio('switch.mp3'),
-
-	init: function(){
-		this.myAudio.addEventListener('ended', function() {
-		    this.currentTime = 0;
-		    this.play();
-		}, false);
-		this.myAudio.play();
-		
-		addEvent(document, 'keydown', function (e) {
-			e = e || window.event;
-			if (e.keyCode === 32) {
-				spacebar.play();
-		    }
-		});
-	},
-};
-
-(function(){
-	// 'use strict';
-	Babel.Audio.init();
-
-}());
-
-
-function addEvent(element, eventName, callback) {
-    if (element.addEventListener) {
-        element.addEventListener(eventName, callback, false);
-    } else if (element.attachEvent) {
-        element.attachEvent('on'+ eventName, callback);
-    } else {
-        element['on' + eventName] = callback;
-    }
-}
-
-
-var myAudio = new Audio('piano.wav');
-myAudio.addEventListener('ended', function() {
-    this.currentTime = 0;
-    this.play();
-}, false);
-myAudio.play();
-
-var spacebar = new Audio('switch.mp3');
-
-addEvent(document, 'keydown', function (e) {
-	e = e || window.event;
-	if (e.keyCode === 32) {
-		spacebar.play();
-    }
-});
-
-// ----- AUDIO 
-
-
-
-// 'use strict'
 
 var container;
 var camera, scene, renderer, clock;
@@ -83,7 +11,7 @@ var lookAtX = 0,
 	lookAtZ = -20,
 	lookAt = new THREE.Vector3 (lookAtX,lookAtY,lookAtZ);
 var noiseY = 0;
-var noiseInc = 0.008;
+var noiseInc = 0.01;
 var stop = false;
 var moveNext = false;
 var moveBack = false;
@@ -134,12 +62,11 @@ function init() {
 	// create hexgon
 	hexagon =  Hexagon(120, 50, 0,0, THREE);
 	hexagon.rotation.z = 0.523598776;
-	
 	scene.add(hexagon);
 
 	//Create particle system
 	var particles = new THREE.Geometry;
-	for (var p = 0; p <20000; p++) {
+	for (var p = 0; p <7000; p++) {
 		var particle = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 550);
 		var particle2 = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500);
 		particles.vertices.push(particle);
@@ -214,27 +141,6 @@ var material2 = new THREE.MeshBasicMaterial({
 	color:0xfa1a1F
 });
 
-// keyboard control for moving forward, next, back
-$(document).keydown(function(evt) {
-    // on space or arrow up move next 
-    if (evt.keyCode === 32 || evt.keyCode === 38) {
-      space = true;
-      moveNext= true;
-    }
-    if (evt.keyCode == 37) {
-		turns.push(1);
-	}
-	if (evt.keyCode == 39){
-	    turns.push(2);
-	}
-	if (evt.keyCode == 40 && pathStack.length>1 ){
-	    moveBack = true;
-	    console.log('moving back');
-		pathStack.pop();
-	    getPrevRoom();
-
-	}
-});
 
 // camera.position.y += 0.008;
 var animateTurn = function(time){
@@ -275,7 +181,8 @@ var animateTurn = function(time){
 			$('#side-title').html('');
 		}
 		else {
-			$('#side-title').html(currentRoom.walls[side].title);
+			$('#side-title').html(''+currentRoom.walls[side].title+'<br><br><p>'+currentRoom.walls[side].txt+'</p>');
+			// $('#side-title').html(currentRoom.walls[side].title);
 		}
 		// hexagon.rotation.z +=0.05719755;		
 	}
@@ -292,10 +199,10 @@ function animate(){
   	render();
 	camera.position.z += noiseInc;//400;
 	noiseY+=noiseInc;
-	if (noiseY>1){
+	if (noiseY>0.8){
 		noiseInc=-0.01;
 	}
-	if (noiseY<-1){
+	if (noiseY<-0.8){
 		noiseInc=0.01;
 	}
 
@@ -328,52 +235,6 @@ function animate(){
 init();
 animate();
 
-$('#players-btn').on('click', function(){
-	if ($('#roomlists').is(':visible')){
-		$('#roomlists').fadeOut(150);
-	} else {
-		$('#userinput').fadeOut(100);
-		$('#roomlists').fadeIn(150);
-		$('#journey').fadeOut(100);
-		$('#path').fadeOut(100);
-	}
-})
 
-$('#user-btn').on('click', function(){
-	if ($('#userinput').is(':visible')){
-		$('#userinput').fadeOut(150);
-	} else {
-		$('#roomlists').fadeOut(100);
-		$('#userinput').fadeIn(150);
-		$('#journey').fadeOut(100);
-		$('#path').fadeOut(100);
-	}
-})
 
-$('#journey-btn').on('click', function(){
-	if ($('#journey').is(':visible')){
-		$('#journey').fadeOut(300);
-	} else {
-		$('#journey').fadeIn(300);
-		$('#userinput').fadeOut(100);
-		$('#roomlists').fadeOut(100);
-		$('#path').fadeOut(100);
-	}
-})
-
-$('#path-btn').on('click', function(){
-	if ($('#path').is(':visible')){
-		$('#path').fadeOut(300);
-	} else {
-		$('#path').fadeIn(300);
-		$('#userinput').fadeOut(100);
-		$('#roomlists').fadeOut(100);
-		$('#journey').fadeOut(100);
-	}
-})
-
-$( "input[type='text']" ).change(function() {
-  // Check inp ut( $( this ).val() ) for validity here
-  nameRef.set( $( this ).val() );
-});
 

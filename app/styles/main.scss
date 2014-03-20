@@ -34,7 +34,11 @@ html, body{
 	background: #75C5B3;
 
 .over{
-	z-index:9999;
+	z-index:2;
+}
+
+a{
+	text-decoration: none !important;
 }
 
 background: #d6c2ac; /* Old browsers */
@@ -106,6 +110,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#E69C4E', end
 		text-transform:uppercase;
 		letter-spacing: 2px;
 		font-weight:800;
+	}
+}
+#ttitle a{
+	color:black;
+	&:hover{
+		color:white;
 	}
 }
 
@@ -186,12 +196,28 @@ background:white;
 	margin-left: 35%;
 	text-align:center;
 	color:white;
-	font-size:1.9em;
+	font-size:2.5em;
 	font-weight:100;
 	color:rgb(230,225,225);
 	line-height:1em;
-	letter-spacing:1px;
-	@include transition(font-size 500ms ease-in)
+	letter-spacing:2px;
+	// text-transform:lowercase;
+			font-family: 'Proxima Nova';
+
+
+	@include transition(font-size 500ms ease-in);
+	p{
+		font-family:'Helvetica Neue', 'Helvetica', sans-serif;
+		font-size:0.4em;
+		font-weight: 100;
+		color:white;
+		text-align:justify;
+		padding:0;
+		line-height:1.2em;
+		text-transform:none;
+		letter-spacing:1px;
+
+	}
 	
 }
 .center{
@@ -280,3 +306,11 @@ input[type=text]:focus {
 	font-family: "Montserrat", "Helvetica Neue", Helvetica, sans-serif;
 }
 
+#path{
+	z-index:3;
+}
+#article-def{
+	font-weight:600;
+	font-size:0.85em;
+	line-height:1.1em;
+}

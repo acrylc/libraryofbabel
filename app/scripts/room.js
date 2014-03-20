@@ -24,15 +24,15 @@ initRoom = function(){
 getRoom = function(id, title){
 
 	pathStack.push([title, id]);	
-	console.log(pathStack);
-	console.log('THE PATH STACK |')
+	//console.log(pathStack);
+	//console.log('THE PATH STACK |')
 	currentRoom.title = title;
 	currentRoom.id = id;
-	console.log(currentRoom.title);
-	console.log(pathStack[pathStack.length-2]);
+	//console.log(currentRoom.title);
+	//console.log(pathStack[pathStack.length-2]);
 
 	$('#journey').prepend('<div>'+title+'</div>');
-
+	side = 1;
 	playerRoomRef.set(title);
 
 	// check all players and place them in same room
@@ -70,11 +70,11 @@ getRoom = function(id, title){
 		walls = []
 		var k = Math.floor(pages.length/6);
 
-		console.log('is equal?');
+		//console.log('is equal?');
 		if (pathStack[pathStack.length-2]!==undefined){
-			console.log(pathStack[pathStack.length-2][0]);
-			console.log(currentRoom.title);
-			console.log(pathStack[pathStack.length-2][0]===currentRoom.title);
+			//console.log(pathStack[pathStack.length-2][0]);
+			//console.log(currentRoom.title);
+			//console.log(pathStack[pathStack.length-2][0]===currentRoom.title);
 		}
 		// if (pathStack[pathStack.length-2]===undefined || pathStack[pathStack.length-2][0]!==title){	
 			var prevIsUnique = true;
@@ -85,8 +85,18 @@ getRoom = function(id, title){
 				walls[i].id = pages[k*i].pageid;
 				walls[i].title = pages[k*i].title;
 				walls[i].txt = '';
+				j = walls.length-1;
+	
 				if (pages[k*i].title === prevId) 
-					prevIsUnique = false
+					prevIsUnique = false;
+				(function(j){
+					//console.log(j);
+					//console.log('getting sentences');
+					getArticleExtract(walls[j].id, function(sentences){
+						walls[j].txt = sentences[0];
+						//console.log(sentences);
+					});
+				}(j));
 			}
 			if ( prevId !== undefined && prevId !== '' && prevIsUnique ){
 				walls.push({
@@ -94,57 +104,62 @@ getRoom = function(id, title){
 					title : prevTitle,
 					txt : ''
 				});
+				j = walls.length-1;
+				(function(j){
+					//console.log(j);
+					//console.log('getting sentences');
+					getArticleExtract(walls[j].id, function(sentences){
+						walls[j].txt = sentences[0];
+						//console.log(sentences);
+					});
+				}(j));
 			} else if (i*k<pages.length) {
 				walls[i]={};
 				walls[i].id = pages[k*i].pageid;
 				walls[i].title = pages[k*i].title;
+				j = walls.length-1;
+				(function(j){
+					//console.log(j);
+					//console.log('getting sentences');
+					getArticleExtract(walls[j].id, function(sentences){
+						walls[j].txt = sentences[0];
+						//console.log(sentences);
+					});
+				}(j));
 			}
-		// } else {
-		// 	console.log('going back');
-		// 	console.log(pathStack.length);
-		// 	console.log(pathStack);
-		// 	for (i=0;i<5;i++){
-		// 		if (i*k >= pages.length)
-		// 			break;
-		// 		walls[i]={}
-		// 		walls[i].id = pages[k*i].pageid;
-		// 		walls[i].title = pages[k*i].title;
-		// 		walls[i].txt = '';
-		// 	}
-		// 	if (currentRoom.title!=='The Library of Babel'){
-		// 		walls.push({
-		// 			id : pathStack[pathStack.length-3][1],
-		// 			title : pathStack[pathStack.length-3][0],
-		// 			txt : ''
-		// 		});
-		// 	} else  {
-		// 		walls[i]={};
-		// 		walls[i].id = pages[k*i].pageid;
-		// 		walls[i].title = pages[k*i].title;
-		// 	}
-		// }
 
 		currentRoom.walls = walls;
 		currentRoom.id= id;
-		displayNewRoom(room);
-		$('#ttitle').html(  currentRoom.title );
+		// displayNewRoom(room);
+		url = currentRoom.title.replace(' ','_');
+		$('#ttitle').html(  '<a href="http://en.wikipedia.org/wiki/'+url+'" target="blank">'+currentRoom.title+'</a>' );
+
+		// $('#ttitle').html(  currentRoom.title );
 		pathTitles.push(currentRoom.title);
 		$('#ptitle').html(  '<b>' + pathTitles[pathTitles.length-1] + '</b>' + ' | ' + $('#ptitle').html() );
+		$('#side-title').html(''+currentRoom.walls[side].title+'<br><br><p>'+currentRoom.walls[side].txt+'</p>');
+
 
 	});
 
-	// get extract
-	$.getJSON( "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exlimit=10&exintro=&explaintext=&pageids="+id+"&callback=?",function(data){
-
-		extract = data['query']['pages'][id].extract
-		currentRoom.txt = extract
+	getArticleExtract(id, function(sentences,extract){
+		currentRoom.txt = extract;
 		$('#extract').html(extract);
-		sentences = extract.replace(/\.+/g,'.|').replace(/\?/g,'?|').replace(/\!/g,'!|').split("|");
-		i = Math.floor(Math.random()*(sentences.length-1))
+		var i = Math.floor(Math.random()*(sentences.length-1));
 		$('#tcap').html(sentences[0]);
 		path += sentences[i];
 		$('#pcap').html(path);
+	});
 
+	// get extract
+}
+
+getArticleExtract = function(id, callback){
+	$.getJSON( "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exlimit=10&exintro=&explaintext=&pageids="+id+"&callback=?",function(data){
+		
+		extract = data['query']['pages'][id].extract
+		sentences = extract.replace(/\.+/g,'.|').replace(/\?/g,'?|').replace(/\!/g,'!|').split("|");
+		callback(sentences, extract);
 	});
 }
 
@@ -164,7 +179,7 @@ getPrevRoom = function(){
 
 displayNewRoom = function( room ){
 	// currentRoom = room;
-	$('#ttitle').html(  room.title );
+	// $('#ttitle').html(  '<a href="">'+room.title );
 }
 
 moveToNextRoom = function(){
@@ -177,7 +192,7 @@ moveToNextRoom = function(){
 		} else {
 		prevId = currentRoom.id;
 		prevTitle = currentRoom.title
-		//console.log('prev Id is set to '+prevId )
+		////console.log('prev Id is set to '+prevId )
 			getRoom(currentRoom.walls[side].id, currentRoom.walls[side].title )
 			hexagon.rotation.z = mult*Math.PI*60/180*side + Math.PI*90/180;
 
@@ -192,7 +207,9 @@ moveToNextRoom = function(){
 	// reposition camera at back of room
 	if (camera.position.y==100 || camera.position.y==101) {
 		camera.position.y = -105;
-		$('#side-title').html(currentRoom['walls'][side].title);
+		// $('#side-title').html(currentRoom['walls'][side].title);
+			$('#side-title').html(''+currentRoom.walls[side].title+'<br><br><p>'+currentRoom.walls[side].txt+'</p>');
+
 		$('#side-title').fadeIn(500);
 		$('#side-title').css({'font-size':'2em'});
 	}
@@ -239,7 +256,7 @@ moveToPrevRoom = function(){
 	// reposition camera at back of room
 	if (camera.position.y==-90 || camera.position.y==-91) {
 		camera.position.y = 105;
-		$('#side-title').html(currentRoom['walls'][side].title);
+			$('#side-title').html(''+currentRoom.walls[side].title+'<br><br><p>'+currentRoom.walls[side].txt+'</p>');
 		$('#side-title').fadeIn(500);
 		$('#side-title').css({'font-size':'2em'});
 	}
