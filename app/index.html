@@ -18,58 +18,69 @@
     </head>
     <body>
 
-    <div id='winmsg'></div>
-
-    <div id='bttns' class='over'>
-        <div class='bttn' id='players-btn'> Players </div>
-        <div class='bttn' id='journey-btn'> Journey </div>
-        <div class='bttn' id='user-btn'> User </div>
-        <div class='bttn' id='path-btn'> Article </div>
+    <div id='intro-overlay'>
+        <div class='intro-text' id='t1'></div>
+        <div class='intro-text' id='t2'></div>
+        <div class='intro-text' id='t3'></div>
+        <div class='intro-text' id='t4'></div>
     </div>
 
+    <div id='project-title' class='center over'>The Library of Babel <br><br> <p>A Visualization of Wikipedia Article Relations</p></div>
 
-    <div id='extract' class='hover-sec' class='over'>
+    <div id='canvas-overlay'>
+        <div id='winmsg'></div>
+
+        <div id='bttns' class='over'>
+            <div class='bttn' id='players-btn'> Players </div>
+            <div class='bttn' id='journey-btn'> Journey </div>
+            <div class='bttn' id='user-btn'> User </div>
+            <div class='bttn' id='path-btn'> Article </div>
+        </div>
+
+
+        <div id='extract' class='hover-sec' class='over'>
+        </div>
+
+        <div id='path' class='hover-sec' class='over'>
+            <div id='article-def'>This generative article is a unique artifact of your path through the library. Each setence is derived from an article you traversed. <a href> download </a> </div>
+            <br>
+            <div id='pcap'></div>
+            <br>
+            <b>
+            <div id='ptitle'></div>
+            </b>
+        
+        </div>
+
+        <div id='journey' class='over'></div>
+
+        <div id='roomlists' class='over'>
+                <div id='label'> Players in my room : </div>
+
+            <ul id='myroom'>
+            </ul>
+                <div id='label'> Players in other rooms: </div>
+
+            <ul id='notmyroom'>
+
+            </ul>
+        </div>
+
+        <div id='userinput' class='over'>
+            Set username :
+            <input type='text' value='fsadfasd'>
+        </div>
+
+        <div id='title' class='over'>
+            <b><div id='ttitle'></div></b>
+            <br>
+
+             <div id='tcap'></div>
+
+        </div>
+
+        <div id='side-title' class='center over'></div>
     </div>
-
-    <div id='path' class='hover-sec' class='over'>
-        <div id='article-def'>This generative article is a unique artifact of your path through the library. Each setence is derived from an article you traversed. <a href> download </a> </div>
-        <br>
-        <div id='pcap'></div>
-        <br>
-        <b>
-        <div id='ptitle'></div>
-        </b>
-    
-    </div>
-
-    <div id='journey' class='over'></div>
-
-    <div id='roomlists' class='over'>
-            <div id='label'> Players in my room : </div>
-
-        <ul id='myroom'>
-        </ul>
-            <div id='label'> Players in other rooms: </div>
-
-        <ul id='notmyroom'>
-
-        </ul>
-    </div>
-
-    <div id='userinput' class='over'>
-        Set username :
-        <input type='text' value='fsadfasd'>
-    </div>
-
-    <div id='title' class='over'>
-        <b><div id='ttitle'></div></b>
-        <br>
-
-         <div id='tcap'></div>
-
-    </div>
-
-    <div id='side-title' class='center over'></div>
 
         <!-- <div id="container" style='background-color:white;'>
         </div> -->

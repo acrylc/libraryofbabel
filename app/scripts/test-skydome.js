@@ -23,7 +23,7 @@ var currentRoom = {
 	walls:[
 	]
 }
-
+var isIntro = true;
 var path = "";
 var pathTitles = [];
 var turns = []
@@ -31,6 +31,12 @@ var prevId, prevTitle
 var playerName, playerId, playerRoomRef, nameRef;
 var pathStack = [];
 
+var intro = [
+	'The universe (which others call the Library) is composed of an indefinite and perhaps infinite number of hexagonal galleries',
+	'When it was proclaimed that the Library contained all books, the first impression was one of extravagant happiness. All men felt themselves to be the masters of an intact and secret treasure.',
+	'Thousands of the greedy abandoned their sweet native hexagons and rushed up the stairways, urged on by the vain intention of finding their Vindication. These pilgrims disputed in the narrow corridors, proferred dark curses, strangled each other on the divine stairways, flung the deceptive books into the air shafts, met their death cast down in a similar fashion by the inhabitants of remote regions. ',
+	'Others went mad.'
+]
 // document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
 
@@ -48,7 +54,7 @@ function init() {
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth*0.1 / window.innerHeight, 1, 100000 );
 	camera.position.y = -420;//0;//140;// -400;
 	camera.position.z = 300;//-30;//45;//400;
-	camera.position.x = 470;//0;//340;
+	camera.position.x = 350;//0;//340;
 	camera.up = new THREE.Vector3(0,0,1);
 	camera.lookAt(lookAt);
 
@@ -66,13 +72,13 @@ function init() {
 
 	//Create particle system
 	var particles = new THREE.Geometry;
-	for (var p = 0; p <4000; p++) {
+	for (var p = 0; p <2000; p++) {
 		var particle = new THREE.Vector3(Math.random() * 1000 - 500, Math.random() * 1000 - 500, Math.random() * 500 - 550);
 		var particle2 = new THREE.Vector3(Math.random() * 1000 - 500, Math.random() * 1000 - 500, Math.random() * 500);
 		particles.vertices.push(particle);
 		particles.vertices.push(particle2);
 	}
-	for (var p = 0; p <4000; p++) {
+	for (var p = 0; p <2000; p++) {
 		var particle = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500 - 550);
 		var particle2 = new THREE.Vector3(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 500);
 		particles.vertices.push(particle);
@@ -212,21 +218,34 @@ function animate(){
 	if (noiseY<-0.8){
 		noiseInc=0.01;
 	}
+	if (isIntro){
 	if (camera.position.x>0){
-	camera.position.x-=0.3;
-	} else {
-		camera.position.x =0 ;
-	}
-		if (camera.position.y<0){
+		camera.position.x-=0.3;
+		} else {
+			camera.position.x =0 ;
+		}
+			if (camera.position.y<0){
 
-	camera.position.y+=0.25;
-	} else {
-		camera.position.y=0;
-	}
-	if (camera.position.z>-30){
-	camera.position.z-=.22;
-	} else {
-		camera.position.z = -30;
+		camera.position.y+=0.25;
+		} else {
+			camera.position.y=0;
+		}
+		if (camera.position.z>-30){
+		camera.position.z-=.22;
+		} else {
+			camera.position.z = -30;
+		}
+		if (camera.position.x===0&&camera.position.y===0&&camera.position.z===-30){
+			isIntro=false;
+			$('#intro-overlay').fadeOut(300);
+			$('#project-title').fadeIn(500);
+					setTimeout(function() {
+			$('#canvas-overlay').fadeIn(300);
+			$('#project-title').fadeOut(100);
+}, 4000);
+// }());
+			// $('#canvas-overlay').fadeIn(300);
+		}
 	}
 	camera.lookAt(lookAt);
 
@@ -259,6 +278,26 @@ function animate(){
 init();
 animate();
 
+(function(){
+	$('#intro-overlay #t1').html(intro[0]);
+	$('#intro-overlay #t2').html(intro[1]);
+	$('#intro-overlay #t3').html(intro[2]);
+	$('#intro-overlay #t4').html(intro[3]);
+	$('#intro-overlay #t5').html(intro[4]);
+	$('#t1').fadeIn(300);
+	setTimeout(function() {
+  $("#t1").fadeOut(300);
+  $("#t2").fadeIn(300);
+}, 6500);
+	setTimeout(function() {
+  $("#t2").fadeOut(300);
+  $("#t3").fadeIn(300);
+}, 14000);
+		setTimeout(function() {
+  // $("#t3").fadeOut(300);
+  $("#t4").fadeIn(300);
+}, 22000);
+}());
 
 
 

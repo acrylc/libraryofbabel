@@ -112,6 +112,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#E69C4E', end
 		font-weight:800;
 	}
 }
+
 #ttitle a{
 	color:black;
 	&:hover{
@@ -314,4 +315,50 @@ input[type=text]:focus {
 	font-weight:600;
 	font-size:0.85em;
 	line-height:1.1em;
+}
+
+#canvas-overlay{
+	display:none;
+}
+
+#intro-overlay{
+	text-align:justify;
+	width:70%;
+	// margin:auto;
+	margin-left:15%;
+	margin-top:5%;
+	font-size:2em;
+	position:fixed;
+	line-height:1.2em;
+	text-align:left;
+	font-weight:400;
+	font-family:"Proxima Nova";
+	letter-spacing:2px;
+	color:black;
+	z-index:4;
+}
+.intro-text{
+	display:none;
+	position:absolute;
+	top:0;
+	left:0;
+}
+#t3,#t4{
+	position:relative;
+}
+#t4{
+}
+#project-title{
+	position:absolute;
+	width:100%;
+	text-align:center;
+	font-family:'Montserrat';
+	font-size:3em;
+	letter-spacing:3px;
+	color:black;
+	text-transform:uppercase;
+	display:none;
+	p{
+		font-size:0.4em;
+	}
 }

@@ -5,8 +5,8 @@ var moveStep = 5,
 	d;
 
 var displayWin=function(n){
-	$('#winmsg').html(n + 'just reached The Big O Notation!');
-	$('#winmsg').fadeIn(300).delay(1500).fadeOut(300);
+	// $('#winmsg').html(n + 'just reached The Big O Notation!');
+	// $('#winmsg').fadeIn(300).delay(1500).fadeOut(300);
 };
 
 initRoom = function(){
