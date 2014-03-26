@@ -19,9 +19,9 @@ var playerName, playerId, playerRoomRef, nameRef;
 var	clock = new THREE.Clock(true);
 
 var intro = [
-	'The universe (which others call the Library) is composed of an indefinite and perhaps infinite number of this.hexagonal galleries.',
+	'The universe (which others call the Library) is composed of an indefinite and perhaps infinite number of hexagonal galleries.',
 	'When it was proclaimed that the Library contained all books, the first impression was one of extravagant happiness. All men felt themselves to be the masters of an intact and secret treasure.',
-	'Thousands of the greedy abandoned their sweet native this.hexagons and rushed up the stairways, urged on by the vain intention of finding their Vindication. These pilgrims disputed in the narrow corridors, proferred dark curses, strangled each other on the divine stairways...',
+	'Thousands of the greedy abandoned their sweet native hexagons and rushed up the stairways, urged on by the vain intention of finding their Vindication. These pilgrims disputed in the narrow corridors, proferred dark curses, strangled each other on the divine stairways...',
 	'Others went mad.'
 ];
 // document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -206,6 +206,7 @@ Babel.Game = {
 					// $('#canvas-overlay').fadeIn(400);
 					Babel.gameIntro.init();
 					$('#project-title').fadeOut(300);
+					// $('#helo').fadeIn(300);
 				}, 1500);
 			}
 		}
@@ -291,6 +292,8 @@ Babel.Game = {
 	},
 
 	initExplore : function(){
+
+
 		var str = 'http://en.wikipedia.org/w/api.php?action=query&format=json&rnnamespace=0&list=random&rnlimit=1'+'&callback=?',
 			that = this;
 		this.type = 'e';
@@ -304,6 +307,8 @@ Babel.Game = {
 	},
 
 	initGame : function(){
+
+
 		$('#journey').fadeIn(100);
 		var id = 192303,
 			title = 'The Library of Babel';

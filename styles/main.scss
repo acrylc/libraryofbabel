@@ -384,11 +384,12 @@ input[type=text]:focus {
 	position:absolute;
 }
 
-#game-intro{
+#game-intro, #help{
 
 	position:absolute;
 	height:400px;
 	display:none;
+	margin-top:-30px;
 	// text-align:center !important;
 	width:100%;
 	left:0px;
@@ -425,6 +426,11 @@ input[type=text]:focus {
 		}
 
 		}
+}
+
+#help{
+	font-size:0.9em;
+	line-height:2em;
 }
 
 #pcap{

@@ -27,16 +27,32 @@ Babel.gameIntro = {
 		$('#game-intro').fadeIn(500);
 		var that = this;
 		$('#explore').on('click', function(){
-			Babel.Game.initExplore();
-			$('#game-intro').fadeOut(500);
-			$('#canvas-overlay').fadeIn();
-			Babel.setControl();
+			$('#help').fadeIn(600);
+							$('#game-intro').fadeOut(500);
+
+			setTimeout(function() {
+				$('#help').fadeOut(600);
+
+				Babel.Game.initExplore();
+				$('#canvas-overlay').fadeIn();
+				Babel.setControl();
+
+			}, 3000);
 		});
 		$('#game').on('click', function(){
-			that.initGame();
-			Babel.setControl();
-			$('#canvas-overlay').fadeIn();
-			Babel.Game.initGame();
+			// that.initGame();
+			$('#help').fadeIn(600);
+						$('#game-intro').fadeOut(500);
+
+			setTimeout(function() {
+				$('#help').fadeOut(600);
+				
+				Babel.setControl();
+				$('#canvas-overlay').fadeIn();
+				Babel.Game.initGame();
+
+			}, 3000);
+
 		});
 		$('#skip-intro').on('click', function(){
 			Babel.Game.camera.position.x=0;
