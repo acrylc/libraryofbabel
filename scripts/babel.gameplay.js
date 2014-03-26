@@ -293,7 +293,6 @@ Babel.Game = {
 
 	initExplore : function(){
 
-
 		var str = 'http://en.wikipedia.org/w/api.php?action=query&format=json&rnnamespace=0&list=random&rnlimit=1'+'&callback=?',
 			that = this;
 		this.type = 'e';
@@ -307,7 +306,6 @@ Babel.Game = {
 	},
 
 	initGame : function(){
-
 
 		$('#journey').fadeIn(100);
 		var id = 192303,
@@ -423,7 +421,7 @@ Babel.Game = {
 			// $('#ttitle').html(  this.currentRoom.title );
 			that.pathTitles.push(that.currentRoom.title);
 			$('#ptitle').html(  '<b>' + that.pathTitles[that.pathTitles.length-1] + '</b>' + ' | ' + $('#ptitle').html() );
-			$('#this.side-title').html(''+that.currentRoom.walls[that.side].title+'<br><br><p>'+that.currentRoom.walls[that.side].txt+'</p>');
+			$('#side-title').html(''+that.currentRoom.walls[that.side].title+'<br><br><p>'+that.currentRoom.walls[that.side].txt+'</p>');
 
 
 		});
