@@ -9,6 +9,8 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
+        <link rel="icon" type="image/png" href="images/lob-logo.png">
+
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
@@ -27,10 +29,28 @@
 
     <div id='skip-intro' class='over bttn'>Skip intro</div>
 
+    <div id='game-intro' class='over center'> 
+        <p>Select a mode</p>
+
+        <div id='game' class='bttn'>Game</div>
+        <!-- <br> -->
+        <div id='explore' class='bttn'>Explore</div>
+
+    </div>
+
     <div id='project-title' class='center over'>The Library of Babel <br><br> <p>A Visualization of Wikipedia Article Relations</p></div>
 
+        <div id='winmsg'>
+            <br>
+            Want to <span id='continue'>continue</span> exploring?.
+        </div>
+
+
     <div id='canvas-overlay'>
-        <div id='winmsg'></div>
+   <!--      <div id='winmsg'>
+            <br>
+            <span id='continue'>continue</span> the game or <span id='restart'>start a new game</span>
+        </div> -->
 
         <div id='bttns' class='over'>
             <div class='bttn' id='players-btn'> Players </div>
@@ -148,10 +168,11 @@
         <script src="scripts/howler.min.js"></script>
         <script src="scripts/tween.min.js"></script>
         <script src='scripts/babel.audio.js'></script>
-        <script src='scripts/skycube.js'></script>
-        <script src='scripts/wiky.js/wiky.js'></script>
+        <!-- <script src='scripts/skycube.js'></script> -->
+        <!-- <script src='scripts/wiky.js/wiky.js'></script> -->
         <script src='scripts/hexagon.js'></script>
-        <script src="scripts/room.js"></script>
+        <!-- <script src="scripts/room.js"></script> -->
+        <script src='scripts/babel.gameplay.js'></script>
         <script src='scripts/babel.control.js'></script>
 
 

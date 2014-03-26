@@ -23,11 +23,10 @@ Babel.Audio = {
 		}, false);
 		this.myAudio.play();
 		
-		addEvent(document, 'keydown', function (e) {
+		this.addEvent(document, 'keydown', function (e) {
 			e = e || window.event;
 			if (e.keyCode === 32) {
-				spacebar.play();
-		    }
+xf		    }
 		});
 	},
 };

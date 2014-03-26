@@ -1,7 +1,7 @@
 $iconSpritePath: "../images/glyphicons-halflings.png";
 $iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
 @import "compass/css3";
-
+@import 'fonts';
 @import 'sass-bootstrap/lib/bootstrap';
 @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
 
@@ -32,6 +32,7 @@ html, body{
 	height:100%;
 	position:relative;
 	background: #75C5B3;
+	text-align:center;
 
 .over{
 	z-index:2;
@@ -233,7 +234,7 @@ background:white;
 	padding-left:10px;
 	position:fixed;
 	right:40px;
-	top:102px;
+	top:82px;
 	max-height: 75%;
 	overflow-y: scroll;
 	font-family: 'Montserrat', Helvetica, sans-serif;
@@ -303,13 +304,25 @@ input[type=text]:focus {
 	top:100px;
 	width:100%;
 	text-align:center;
-	font-size:4em;
+	font-size:2em;
+	line-height:1.7em;
 	color:black;
 	font-family: "Montserrat", "Helvetica Neue", Helvetica, sans-serif;
+	display:none;
+	z-index:9999;
+	span{
+		background:black;
+		color:white;
+		padding:10px;
+
+	}
 }
 
 #path{
 	z-index:3;
+	text-align:left;
+	font-size:1.1em;
+	font-family:"Proxima Nova", 'Helvetica Neue', 'Helvetica', sans-serif;
 }
 #article-def{
 	font-weight:600;
@@ -369,4 +382,51 @@ input[type=text]:focus {
 	bottom:50px;
 	right:50px;
 	position:absolute;
+}
+
+#game-intro{
+
+	position:absolute;
+	height:400px;
+	display:none;
+	// text-align:center !important;
+	width:100%;
+	left:0px;
+	p{
+		width:30%;
+		margin-left: 35%;
+		font-size:2em;
+		font-weight:300;
+		display:block;
+		color: black;
+		text-align:left;
+		position:relative;
+		margin-bottom: 20px;
+	}
+
+	div{
+		width:30%;
+		// float:left;
+		// margin: 0 5% 0 5%;
+		position:relative;
+		margin:0;
+		// display:block;
+		// float:right;
+		background-color: rgba(0,0,0,0.8);
+		color:white;
+		padding:10px 0 10px 0;
+		margin-top:0px;
+		margin-bottom:5px;
+		margin-left: 35% !important;
+		left:0px;
+		&:hover{
+			color:black;
+			background-color:white;
+		}
+
+		}
+}
+
+#pcap{
+	font-family:"Proxima Nova", "Helvetica", sas-serif;
 }
