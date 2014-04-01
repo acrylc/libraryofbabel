@@ -173,11 +173,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#E69C4E', end
 	line-height: 1.7em;
 	border-radius:2px;
   @include box-sizing(border-box);
-overflow-y: scroll;
-color:black;
-//color:white;
-background:white;
-		font-family: 'Proxima Nova';
+	overflow-y: scroll;
+	color:black;
+	//color:white;
+	background:white;
+	font-family: 'Proxima Nova', 'Helvetica', sans-serif;
 	//background:rgb(27,28,30);
 
 }
@@ -186,7 +186,7 @@ background:white;
 #ptitle{
 	font-size:0.8em;
 	color: rgb(150,150,150);
-		font-family: 'Proxima Nova';
+	font-family: 'Proxima Nova', 'Helvetica', sans-serif;
 		font-weight:400;
 
 }
@@ -202,7 +202,7 @@ background:white;
 	color:rgb(230,225,225);
 	line-height:1em;
 	letter-spacing:2px;
-	font-family: 'Proxima Nova';
+	font-family: 'Proxima Nova', 'Helvetica', sans-serif;
 	@include transition(font-size 500ms ease-in);
 	a{
 		color:rgb(230,225,225);
@@ -377,11 +377,24 @@ input[type=text]:focus {
 	}
 }
 
-#skip-intro{
+ #skip-intro{
 	width:150px;
 	bottom:50px;
 	right:50px;
 	position:absolute;
+}
+
+#instructions, #restart{
+	width:100px;
+	bottom:50px;
+	right:40px;
+	position:absolute;
+
+}
+#restart{
+	right: 143px;
+	background-color:darken(#c0392b,8%);
+
 }
 
 #game-intro, #help, #mission{
@@ -395,7 +408,7 @@ input[type=text]:focus {
 	p{
 		width:30%;
 		margin-left: 35%;
-		font-size:2em;
+		font-size:1.5em;
 		font-weight:300;
 		display:block;
 		color: black;
@@ -425,6 +438,7 @@ input[type=text]:focus {
 		}
 
 		}
+
 }
 
 #help, #mission{
@@ -432,8 +446,15 @@ input[type=text]:focus {
 	line-height:2.2em;
 	display:none;
 	// width: 40%;
+	.bttn{
+		font-size:1em;
+	}
 }
 
 #pcap{
 	font-family:"Proxima Nova", "Helvetica", sas-serif;
+}
+
+.inst{
+	display:none;
 }

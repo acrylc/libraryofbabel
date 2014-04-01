@@ -51,6 +51,22 @@ Babel.Game = {
 	],
 	type : '',
 
+	clear : function(){
+		'use strict';
+		this.pathStack=[];
+		this.turns = [];
+		this.moveNext = false;
+		this.moveBack = false;
+		this.currentRoom = {
+			id:-1,
+			walls:[
+			]
+		};
+		path = '';
+		$('.toclear').html('');
+		$('.inner-control').off('click');
+	},
+
 	init : function () {
 		'use strict';
 		// Create container to display library
@@ -125,7 +141,7 @@ Babel.Game = {
 			var angle = -0.05;
 			var matrix = new THREE.Matrix4().makeRotationAxis( axis, angle );
 			this.inc += 0.25;
-			this.hexagon.rotation.z += mult*0.25;		
+			this.hexagon.rotation.z += mult*0.25;
 		}
 		this.camera.lookAt(lookAt);
 		// this.camera.rotation.x = ( Math.PI / 90)
@@ -244,7 +260,8 @@ Babel.Game = {
 	 initDBListeners : function (){
 	 	// //console.log('init DB');
 	    var usersRef = new Firebase('https://libraryofbabel.firebaseio.com/players/');
-	    playerName = Math.random().toString(36).substring(7);
+	    if (playerName === undefined)
+	    	playerName = Math.random().toString(36).substring(7);
 	    $('input').val(playerName);
 		t = usersRef.push({'name' : playerName});
 		playerId = t.name();
@@ -297,7 +314,7 @@ Babel.Game = {
 			that = this;
 		this.type = 'e';
 		$('#journey').fadeIn(100);
-
+		Babel.pauseControl();
 		$.getJSON(str, function(data) {
 			var id = data.query.random[0].id,
 				title = data.query.random[0].title;

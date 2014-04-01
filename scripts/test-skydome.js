@@ -31,33 +31,36 @@ var Babel = Babel || {};
 
 			// Explore mode - fade help
 			$('#explore').on('click', function(){
-				$('#help').fadeIn(600);
+				$('.helpexplore').fadeIn(600);
 				$('#game-intro').fadeOut(500);
 
-				setTimeout(function() {
-					$('#help').fadeOut(600);
+				$('#enterexplore').on('click', function(){
+					$('.helpexplore').fadeOut(600);
 					Babel.Game.initExplore();
+					$('.inst').fadeIn();
 					$('#canvas-overlay').fadeIn();
 					Babel.setControl();
-				}, 3000);
+				});
 			});
 
 			//Game mode - fade helpp, then mission
 			$('#game').on('click', function(){
-				$('#help').fadeIn(600);
+				$('.helpgame').fadeIn(600);
 				$('#game-intro').fadeOut(500);
 
-				setTimeout(function() {
-					$('#help').fadeOut(600);
-					$('#mission').html('<p>You are in the room <b>Library of Babel</b>. Navigate to the room <b>Big O Notaion</b> with as little jumps as possible.</p>');
+				$('#ok').on('click', function(){
+					$('.helpgame').fadeOut(600);
+					$('#mission p').html('You are in the room <b>Library of Babel</b>. Navigate to the room <b>Big O Notaion</b> with as little jumps as possible.');
 					$('#mission').fadeIn(600);
-					setTimeout(function() {
-						$('#mission').fadeOut(600);
-						Babel.setControl();
-						$('#canvas-overlay').fadeIn();
-						Babel.Game.initGame();
-					}, 3000);
-				}, 5000);
+				});
+			});
+
+			$('#entergame').on('click', function(){
+				$('#mission').fadeOut(600);
+				Babel.setControl();
+				$('.inst').fadeIn();
+				$('#canvas-overlay').fadeIn();
+				Babel.Game.initGame();
 			});
 
 			// Skip intro
@@ -65,6 +68,18 @@ var Babel = Babel || {};
 				Babel.Game.camera.position.x=0;
 				Babel.Game.camera.position.y=0;
 				Babel.Game.camera.position.z=-30;
+			});
+
+			$('#instructions').on('click', function(){
+				$('#canvas-overlay').fadeOut();
+				$('.helpinstructions').fadeIn();
+				Babel.pauseControl();
+			});
+
+			$('#reenter').on('click', function(){
+				$('.helpinstructions').fadeOut();
+				$('#canvas-overlay').fadeIn();
+				Babel.setControl();
 			});
 		}
 	};
@@ -81,10 +96,12 @@ var Babel = Babel || {};
 
 	});
 	$('#restart').on('click', function(){
+		$('.inst').fadeOut();
+		Babel.pauseControl();
 		$('#winmsg').fadeOut();
+		$('#canvas-overlay').fadeOut();
 		$('#game-intro').fadeIn(300);
-		// Babel.Game.init();
-		// Babel.Game.initGame();
+		Babel.Game.clear();
 		Babel.Game.camera.position.x=0;
 		Babel.Game.camera.position.y=0;
 		Babel.Game.camera.position.z=-30;

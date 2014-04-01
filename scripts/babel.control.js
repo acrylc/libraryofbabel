@@ -86,5 +86,64 @@ var Babel = Babel || {};
 
 	};
 
+	Babel.pauseControl = function (){
+		$('#players-btn').off();
+
+		$('#user-btn').off();
+
+		$('#journey-btn').off();
+
+		$('#path-btn').off();
+
+		$(document).unbind();
+
+	};
+
+	Babel.restartControl = function (){
+		$('#players-btn').on('click', function(){
+			if ($('#roomlists').is(':visible')){
+				$('#roomlists').fadeOut(150);
+			} else {
+				$('#userinput').fadeOut(100);
+				$('#roomlists').fadeIn(150);
+				$('#journey').fadeOut(100);
+				$('#path').fadeOut(100);
+			}
+		});
+
+		$('#user-btn').on('click', function(){
+			if ($('#userinput').is(':visible')){
+				$('#userinput').fadeOut(150);
+			} else {
+				$('#roomlists').fadeOut(100);
+				$('#userinput').fadeIn(150);
+				$('#journey').fadeOut(100);
+				$('#path').fadeOut(100);
+			}
+		});
+
+		$('#journey-btn').on('click', function(){
+			if ($('#journey').is(':visible')){
+				$('#journey').fadeOut(300);
+			} else {
+				$('#journey').fadeIn(300);
+				$('#userinput').fadeOut(100);
+				$('#roomlists').fadeOut(100);
+				$('#path').fadeOut(100);
+			}
+		});
+
+		$('#path-btn').on('click', function(){
+			if ($('#path').is(':visible')){
+				$('#path').fadeOut(300);
+			} else {
+				$('#path').fadeIn(300);
+				$('#userinput').fadeOut(100);
+				$('#roomlists').fadeOut(100);
+				$('#journey').fadeOut(100);
+			}
+		});	
+	}
+
 }());
 

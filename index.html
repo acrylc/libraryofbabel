@@ -28,6 +28,8 @@
     </div>
 
     <div id='skip-intro' class='over bttn'>Skip intro</div>
+    <div id='instructions' class='over bttn inst'>Instructions</div>
+    <div id='restart' class='over bttn inst'>Restart</div>
 
     <div id='game-intro' class='over center'> 
         <p>Select a mode</p>
@@ -40,10 +42,15 @@
 
     <div id='project-title' class='center over'>The Library of Babel <br><br> <p>A Visualization of Wikipedia Article Relations</p></div>
 
-    <div id='help' class='center over'><p>Each hexagon is a wikipedia article. Each wall connects you to an article linked to your article. <br>Click the <b>left and right arrows</b> to move left and right, <b>up arrow</b> to jump to the forward hexagon and <b>down arrow</b> to jump back to the previous hexagon.</p></div>
+    <div id='help' class='center over helpgame'><p>Each hexagon represents a wikipedia article. Each wall connects you to a related article. Click the <b>left and right arrows</b> to move left and right, <b>up arrow</b> to jump to the forward hexagon and <b>down arrow</b> to jump back to the previous hexagon. <div class='bttn' id='ok'>OK</div></p></div>
+
+    <div id='help' class='center over helpexplore'><p>Each hexagon represents a wikipedia article. Each wall connects you to a related article. Click the <b>left and right arrows</b> to move left and right, <b>up arrow</b> to jump to the forward hexagon and <b>down arrow</b> to jump back to the previous hexagon. <div id='enterexplore' class='bttn'>Enter the Library</div></p></div>
+
+    <div id='help' class='center over helpinstructions'><p>Each hexagon represents a wikipedia article. Each wall connects you to a related article. Click the <b>left and right arrows</b> to move left and right, <b>up arrow</b> to jump to the forward hexagon and <b>down arrow</b> to jump back to the previous hexagon. <div class='bttn' id='reenter'>OK</div></p></div>
 
     <div id='mission' class='center over'>
-        <p>Your mission : navigate to the room .. with as little jumps as possible</p>
+        <p></p>
+        <div class='bttn' id='entergame'>Enter the Library</div>
     </div>
 
     <div id='winmsg'>
@@ -55,10 +62,10 @@
     <div id='canvas-overlay'>
 
         <div id='bttns' class='over'>
-            <div class='bttn' id='players-btn'> Players </div>
-            <div class='bttn' id='journey-btn'> Journey </div>
-            <div class='bttn' id='user-btn'> User </div>
-            <div class='bttn' id='path-btn'> Article </div>
+            <div class='bttn inner-control' id='players-btn'> Players </div>
+            <div class='bttn inner-control' id='journey-btn'> Journey </div>
+            <div class='bttn inner-control' id='user-btn'> User </div>
+            <div class='bttn inner-control' id='path-btn'> Article </div>
         </div>
 
 
@@ -66,18 +73,18 @@
         </div>
 
         <div id='path' class='hover-sec' class='over'>
-            <div id='article-def'>This generative article is a unique artifact of your path through the library. Each setence is derived from an article you traversed. <a href> download </a> </div>
+            <div id='article-def'>This generative article is a unique artifact of your path through the library. Each setence is derived from an article you traversed.<!--  <a href> download </a> --> </div>
             <br>
-            <div id='pcap'></div>
+            <div id='pcap' class='toclear'></div>
             <br>
             <b>
-            <div id='ptitle'></div>
+            <div id='ptitle' class='toclear'></div>
             </b>
         
         </div>
 
-        <div id='journey' class='over'></div>
-
+        <div id='journey' class='over toclear' ></div>
+ 
         <div id='roomlists' class='over'>
                 <div id='label'> Players in my room : </div>
 
