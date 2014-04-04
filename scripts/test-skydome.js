@@ -76,8 +76,17 @@ var Babel = Babel || {};
 				Babel.pauseControl();
 			});
 
-			$('#reenter').on('click', function(){
+
+			$('#about').on('click', function(){
+				$('#canvas-overlay').fadeOut();
+				$('.helpabout').fadeIn();
+				Babel.pauseControl();
+			});
+
+
+			$('.reenter').on('click', function(){
 				$('.helpinstructions').fadeOut();
+				$('.helpabout').fadeOut();
 				$('#canvas-overlay').fadeIn();
 				Babel.setControl();
 			});
