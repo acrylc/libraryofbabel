@@ -149,6 +149,8 @@ var material2 = new THREE.MeshBasicMaterial({
 
 
 // camera.position.y += 0.008;
+// TODO: should really change code to not use a global
+mult = 0;
 var animateTurn = function(time){
 	if (turns[0] == 1)
 		mult = -1;
